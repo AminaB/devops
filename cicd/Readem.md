@@ -28,3 +28,9 @@
     - use wget to download package : wget https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.1-bin.tar.gz
     - unzip tar xzvf 
     - copy maven to /opt : cp -r src dest
+#### install jenkins
+    https://www.jenkins.io/doc/book/installing/linux/#red-hat-centos
+    - start : sudo systemctl start jenkins
+    - status : sudo systemctl status jenkins
+    - stop : sudo systemctl stop jenkins
+        
