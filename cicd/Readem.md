@@ -18,7 +18,9 @@
 #### commands fo Amazon Linux 2023
     - connect as root (sudo su -), and run command in root directory
     - 2023 Packages available here : https://docs.aws.amazon.com/linux/al2023/release-notes/all-packages-al2023-20230419.html
+### EC2 instance 1 ( amazon linux 2023) for continuous integration
 #### install java
+    wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.deb (chearch for working jdk, this link generate error in jenkins in a linux 2023)
     - yum install  java-11-amazon-corretto 
     - hostnamectl : to see amazonlinux version
     - edit env variable to .bash_profile 
@@ -26,11 +28,28 @@
         PATH=$PATH:$HOME/bin:$JAVA_HOME
 #### install maven
     - use wget to download package : wget https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.1-bin.tar.gz
-    - unzip tar xzvf 
+    - unzip tar xzvf
     - copy maven to /opt : cp -r src dest
 #### install jenkins
+    for ec2 instance use fedora distritubition
     https://www.jenkins.io/doc/book/installing/linux/#red-hat-centos
     - start : sudo systemctl start jenkins
     - status : sudo systemctl status jenkins
-    - stop : sudo systemctl stop jenkins
+    - stop : sudo systemctl stop jenkins  
+    - create job
+    - configure git java and maven path in jenkins manager
+    - build job to create war file
+### EC2 instance 2 ( amazon linux 2023) for continuous deployment
+    - create new ec2 instance
+    - connect to it with user ec2-uer
+    - configure user(ec2-user) with password( sudo psswd ec2-user)
+    - enable pwd authentification in vi /etc/sshd_config (as root). service sshd reload
+#### manage jenkins to deploy war file
+    - in manage jenkins install new pluggins (publish over ssh)
+    - configure system in jenkins : in publish ssh section fill information about server.
+        - advanced (use password and give it
+    - in jenkins job,  add post-build action -> sen build artifacts over ssh
+    - save file in home direcory of ec2-user ("." in remote directory input)
+    - run job and we will see war file in home.
+    
         
