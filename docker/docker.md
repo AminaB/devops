@@ -1,3 +1,6 @@
+container : is a runtime instance of image
+image : is a executable package of software tha content everything we needed to run an application code, 
+runtime, system tools, libraries and settings.
 docker.md
 
 ## create image 
@@ -20,10 +23,11 @@ docker.md
 		ENTRYPOINT FLASK_APP=app.py flask run --host=0.0.0.0
 
 	- docker build . or docker build . -t mys-simple-web-app
+    - docker build -t webapp-color:lite .
 
 ### run images
 	- docker run my-simple-web-app
-
+    - docker run -p 8282:8080 webapp-color
 ### we can push it to dockerhub
 	- docker login
 	- docker build . -t yourrepositoryNAME/mys-simple-web-app
