@@ -84,3 +84,7 @@
 - add these commands to post-build actions -> transfers-> exec command :
   sudo docker build -t custom-image .
   docker run -d -p 8080:8080 --name custom-container custom-image
+- inconvenient of create container in jenkins.
+    jenkins always create an image
+    if we run another build, it will fail because we have already a running container with same name
+    first we have to stop and remove manually the container before running new build
