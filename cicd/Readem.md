@@ -70,21 +70,35 @@
     - verified tomcat container is still up : docker ps
     - go to @ip:8080/webapp to see your site web
 #### create docker file to automate this config
-- sudo vi Dockerfile
+    - sudo vi Dockerfile
     FROM tomcat:latest
     COPY ./webapp.war /usr/local/tomcat/webapps
     Run cp -r /usr/local/tomcat/webapps;dist/* /usr/local/tomcat/webapps
-- create image from docker file
-    sudo docker build -t custom-image .
-- run image 
-  docker run -d -p 8080:8080 --name custom-container custom-image
-- go to @ip:8080/webapp to see your site web
+    - create image from docker file
+      sudo docker build -t custom-image .
+    - run image 
+     docker run -d -p 8080:8080 --name custom-container custom-image
+    - go to @ip:8080/webapp to see your site web
 
 #### we can create image from jenkins to automate
-- add these commands to post-build actions -> transfers-> exec command :
-  sudo docker build -t custom-image .
-  docker run -d -p 8080:8080 --name custom-container custom-image
-- inconvenient of create container in jenkins.
-    jenkins always create an image
-    if we run another build, it will fail because we have already a running container with same name
-    first we have to stop and remove manually the container before running new build
+    - add these commands to post-build actions -> transfers-> exec command :
+      sudo docker build -t custom-image .
+      docker run -d -p 8080:8080 --name custom-container custom-image
+    - inconvenient of create container in jenkins.
+          jenkins always create an image
+          if we run another build, it will fail because we have already a running container with same name
+          first we have to stop and remove manually the container before running new build
+#### ssh connection to another linux server
+    - ssh connection from server x to server y :
+        - server x: ssh-keygen
+        - server x : cd .ssh ( we have to keys private and public)
+        _ in server 2 allow password authentication
+            sudo su -
+            vi /etc/ssh/sshd_config : passwordauthent to yes
+            service sshd reload
+            add password to ec2-user : passwd ec2-user
+        - deploy public key to server y
+            server x : ssh-copy-id ec2-user@@ipy : the public key wil be in .ssh/authorized_keys in server y 
+        - now you can connect to server y
+            ssh ec2-user@@ipy
+    - exit 
