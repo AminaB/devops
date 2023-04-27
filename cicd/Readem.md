@@ -69,5 +69,15 @@
         sudo docker cp webapp.war tomcat-container:/usr/local/tomcat/webapp.war
     - verified tomcat container is still up : docker ps
     - go to @ip:8080/webapp to see your site web
-#### create docker file to automate those config
-        
+#### create docker file to automate this config
+- sudo vi Dockerfile
+    FROM tomcat:latest
+    COPY ./webapp.war /usr/local/tomcat/webapps
+    Run cp -r /usr/local/tomcat/webapps;dist/* /usr/local/tomcat/webapps
+- create image from docker file
+    sudo docker build -t custom-image .
+- run image 
+  docker run -d -p 8080:8080 --name custom-container custom-image
+- go to @ip:8080/webapp to see your site web
+ 
+
