@@ -51,5 +51,23 @@
     - in jenkins job,  add post-build action -> sen build artifacts over ssh
     - save file in home direcory of ec2-user ("." in remote directory input)
     - run job and we will see war file in home.
-    
+#### install docker (to run tomcat) : 
+    we cannot run many tomcat in physic computer. if later we have differents app using deffereent java version, we need different tomcat versions server
+    so, with docker we can run in pararell 2 or more containers with tomcat running on them.
+    - cat /etc/group : to see all groups available for root user
+    - giving permission access to group
+        usermod -aG docker ec2-user
+    - login to ec2-user
+    - sudo service docker start
+    - create container with tomcat image runing on it: 
+        docker pull tomcat:latest
+        docker run -d -p 8080:8080 --name tomcat-container ImageID 
+    - docker exec -it tomcat-container /bin/bash
+        cd webapps.dist
+        cp -r ./* ../webapps
+    - copy webapp.war file from my amazon linux to my tomcat container
+        sudo docker cp webapp.war tomcat-container:/usr/local/tomcat/webapp.war
+    - verified tomcat container is still up : docker ps
+    - go to @ip:8080/webapp to see your site web
+#### create docker file to automate those config
         
