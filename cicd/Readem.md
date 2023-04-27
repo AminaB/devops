@@ -79,5 +79,8 @@
 - run image 
   docker run -d -p 8080:8080 --name custom-container custom-image
 - go to @ip:8080/webapp to see your site web
- 
 
+#### we can create image from jenkins to automate
+- add these commands to post-build actions -> transfers-> exec command :
+  sudo docker build -t custom-image .
+  docker run -d -p 8080:8080 --name custom-container custom-image
