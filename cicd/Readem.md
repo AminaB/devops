@@ -1,5 +1,6 @@
 ## CI CD
     - buy domain name : godaddy
+    - hello world projetc for this course : https://github.com/rahulshettyacademy/DevopsBasics.git
 #### command to build projects
     java :  mvn clean install (generate war file, to deploy in tomcat server, in App/Web Server)
     angular : dist -ng -build
@@ -142,4 +143,9 @@
 
 #### automate integration (without running mually the job)
     achieve continuous integration with github hook in jenkisn
+    - in jenkis server -> manage jenkins -> configure system-> gitHub -> advanced -> activr "Specify another hook for GitHub.."
+    -> copy url
+    - in github repo go to settings -> webhooks -> add webhook -> past url copied from jenkins in "paylod URL"
+    - go to job -> configure -> build triggers -> select "Github hook trigger for gitscm polling" -> aplly
+    - do some changes commit and push, we will see buil starting automatically in jenkins
     
