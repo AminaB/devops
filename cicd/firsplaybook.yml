@@ -1,6 +1,14 @@
 ---
 - hosts: all
   tasks:
+    - name: copy Dockerfile into remote machine
+      copy:
+        src: Dockerfile
+        dest: .
+    - name: copy war file into remote machine
+      copy:
+        src: webapp.war
+        dest: .
     - name: stop the running container
       command: docker stop custom-container
       ignore_errors: true

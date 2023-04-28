@@ -123,3 +123,11 @@
         ansible-playbook -i hosts firstplaybook.yml
 #### use ansible to jenkins to deploy
     - remove all docker stuff in jenkins and replace it by this command : ansible-playbook -i hosts firstplaybook.yml
+#### we can deploy with ansible in many servers by adding their @ip in hosts (ec-user@@ip).
+    - first we can copy dockerfile and webapp from one server to another if their is not present (update .yml file)
+    - check if docker is installed to all servers ( we cans also install docker in ansible config file)
+    - we can run ti in only one machine even if their are many in hosts
+          ansible-playbook -i hosts firstplaybook.yml --limit ec2-user@@ip
+        upadet command on jenkisn
+
+    
