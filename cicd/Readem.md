@@ -48,7 +48,7 @@
     - in manage jenkins install new pluggins (publish over ssh)
     - configure system in jenkins : in publish ssh section fill information about server.
         - advanced (use password and give it
-    - in jenkins job,  add post-build action -> sen build artifacts over ssh
+    - in jenkins job,  add post-build action -> send build artifacts over ssh
     - save file in home direcory of ec2-user ("." in remote directory input)
     - run job and we will see war file in home.
 #### install docker (to run tomcat) : 
@@ -102,3 +102,24 @@
         - now you can connect to server y
             ssh ec2-user@@ipy
     - exit 
+#### Ansible 
+    is a tools that used for configuration management (Installing software, ... )
+    ansible cans connect to nodes(our linux machines through ssh) and push small program, and delete them when we finished
+    ansible use yaml language 
+    - install ansible : ansyble is a python package, first we have to install python
+        yum install python
+        pip install ansible
+        ansible --version
+    - add sudo access to ec2-user
+        echo "ec2-user All=(ALL) NOPASSWD:ALL">> /etc/sudoers
+    stop and delete docker containers
+    delete docker images
+    - create yaml file for config docker commands in it
+       see file : firsplaybook.yml
+    - create a host file in root of ec2-user, to add all ip@ where you want to run this ansible config
+        vi hosts
+    - run ansible config file
+        NB : ansible connect to localhost with ssh, so we had better add publicKey into Authorize ( see "ssh connection to another linux server" section)
+        ansible-playbook -i hosts firstplaybook.yml
+#### use ansible to jenkins to deploy
+    - remove all docker stuff in jenkins and replace it by this command : ansible-playbook -i hosts firstplaybook.yml

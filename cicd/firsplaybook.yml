@@ -1,0 +1,20 @@
+---
+- hosts: all
+  tasks:
+    - name: stop the running container
+      command: docker stop custom-container
+      ignore_errors: true
+
+    - name: delete the container
+      command: docker rm custom-container
+      ignore_errors: true
+
+    - name: remove the running image
+      command: docker rm custom-image
+      ignore_errors: true
+
+    - name: create image from the Dockerfile
+      command: docker build -t custom-image
+
+    - name: create and run the container
+      command: docker run -d -p 8080:8080 --name custom-container custom-image
