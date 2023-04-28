@@ -148,4 +148,11 @@
     - in github repo go to settings -> webhooks -> add webhook -> past url copied from jenkins in "paylod URL"
     - go to job -> configure -> build triggers -> select "Github hook trigger for gitscm polling" -> aplly
     - do some changes commit and push, we will see buil starting automatically in jenkins
-    
+
+#### parameterize jenkins to deploy in multiple environment
+    ansible-playbook -i hosts firstplaybook.yml --limit QA (see hosts file, we rename server to QA)
+    - parametirized the build, create another job
+        select "This project is parameterized" -> choice parameter -> name "env" ->choices ( QA /n QA1 /n  prod...)
+    - in exec command 
+        ansible-playbook -i hosts firstplaybook.yml --limit ${Environment}
+    - to buil click on "build with patameters" asn select env

@@ -1,2 +1,3 @@
 localhost
+[QA] #(with that ec2-user@@ip can call by QA)
 ec2-user@@ip
