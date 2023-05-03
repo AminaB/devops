@@ -15,5 +15,12 @@
         The name of the node the current build is running on. Set to 'master' for the Jenkins controller.
     WORKSPACE
     ....
-#### Jenkins pipeline
+#### Jenkins pipeline : chaining job execution 
+install plugins pipeline
+    - Manage ling -> Manage plugins -> available -> build pipeline plugin -> install without restart
+setup job and pipeline plugin
+    - click + icon -> name of pipeline -> check build pipeline view ->ok -> Title -> select initial job -> select all show options
+    -> apply
+
+
 
