@@ -22,5 +22,18 @@ setup job and pipeline plugin
     - click + icon -> name of pipeline -> check build pipeline view ->ok -> Title -> select initial job -> select all show options
     -> apply
 
-
+#### Artifactory : repository manager
+    it is a java webapp which has been deployed as a war file into apache
+    - first install java
+    - install Artifactory
+    - service atifactory start
+    - go to : server.noodle.tetra:8081/artifactory
+    - sudo yum install tomcat-webapps tomcat-admin-webapps
+    - Update JAVA_OPTS in /usr/share/tomcat/conf/tomcat.conf
+    - edit user : vi /usr/share/tomcat/tomcat-users.xml : ucommmnet <role... and admin user
+    - systemctl start tomcat
+    - go to server.noodle.tetra:8080
+    - go back server.noodle.tetra:8081/artifactory
+    - login
+    - connect artifactory to jenkins
 
