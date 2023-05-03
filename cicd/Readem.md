@@ -141,7 +141,7 @@
     Deploying Apps using Ansible + Docker on Linux and automating the Continuous Delivery process 
     with Jenkins is the powerful Process followed in Devops World.
 
-#### automate integration (without running mually the job)
+#### automate integration (without running manually the job)
     achieve continuous integration with github hook in jenkisn
     - in jenkis server -> manage jenkins -> configure system-> gitHub -> advanced -> activr "Specify another hook for GitHub.."
     -> copy url
