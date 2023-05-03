@@ -41,3 +41,12 @@ setup job and pipeline plugin
     - add artifactory host in jenkins OS  vi /etc/hosts  (@ip art.noodle.tetra) (@ip https://art.noodle.tetra/)
     - Manage jenkins -> configure system -> artifactory section -> add -> server id=art.noodle.tetra -> url =https://art.noodle.tetra:8081/artifactory 
         -> username -> password -> test connection
+#### configure job 
+    - configure job
+    - check gradle-artifactory integration -> artifactory deployement server= https://art.noodle.tetra:8081/artifactory
+        -> refresh -> and select one repository in the list -> enable option publish artofacts to artifactory 
+        -> accept default for others options
+    - configure grdalle version or use default
+    - build section
+        -> add build step -> invoke graddle script ->  use graddle executable -> make gradle executable -> apply
+        -> build 
