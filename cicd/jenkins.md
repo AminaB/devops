@@ -1,4 +1,5 @@
-### jenkis
+### jenkins
+install jenkins and artifactory in 2 different machine
 #### available env variable in jenkins
     https://www.jenkins.io/doc/book/pipeline/jenkinsfile/
     JAVA_HOME
@@ -35,5 +36,8 @@ setup job and pipeline plugin
     - go to server.noodle.tetra:8080
     - go back server.noodle.tetra:8081/artifactory
     - login
-    - connect artifactory to jenkins
-
+#### connect artifactory to jenkins
+    - install artifactory pluggins to jenkins
+    - add artifactory host in jenkins OS  vi /etc/hosts  (@ip art.noodle.tetra) (@ip https://art.noodle.tetra/)
+    - Manage jenkins -> configure system -> artifactory section -> add -> server id=art.noodle.tetra -> url =https://art.noodle.tetra:8081/artifactory 
+        -> username -> password -> test connection
