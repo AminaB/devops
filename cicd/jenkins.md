@@ -71,5 +71,24 @@ setup job and pipeline plugin
     - add post buils action (it will use in pipeline)
         -> archive the artifacts option -> files to archive = proejectname/target/*.war
     - apply save
-
+#### create a pipeline
+    -> jenkins -> + -> name it -> check build pipeline view option -> ok
+    -> slelect yout new job in "select initial job" - check show options -> apply ok
+    - create another project that will chained after new job : to copy artifact (war file)
+        -> manage jenkins -> install "copy artifact pluggin"
+        -> manage jenkins ->install "deploy to container pluggins"
+        -> new item -> job 2 -> add buid step -> copy artifact from another project -> project nme = new job-> 
+        -> which build = lates successful build -> add post build action -> deploy war/ear to a container
+        -> war/ear files = **/* -> context path = http://tomcat.noodle.tetra:8080/ (do not forget the dns http mapping adress in jenkins server for tomcat)
+            -> we casn use this contex path in ci cd = tetra_noodle_app_$BUILD_NUMBER
+            -> containers -> tomcat7.x -> enter credential -> tomcat url -> http://tomcat.noodle.tetra:8080
+        -> apply save 
+    - chaine job in pipeline
+        -> in job 2 -> build triggers section -> check build after other projects are build -> select new job 
+                or
+        -> in new job -> configure -> add post build action -> select "Build Other project" -> job 2 ->
+    - apply save
+#### start pipeline
+    go to pipeline -> run -> enable auto refresh
+    
 
