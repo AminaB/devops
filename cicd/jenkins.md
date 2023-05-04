@@ -1,4 +1,4 @@
-### jenkins
+# jenkins
 install jenkins and artifactory in 2 different machine
 #### available env variable in jenkins
     https://www.jenkins.io/doc/book/pipeline/jenkinsfile/
@@ -16,6 +16,7 @@ install jenkins and artifactory in 2 different machine
         The name of the node the current build is running on. Set to 'master' for the Jenkins controller.
     WORKSPACE
     ....
+## CI CD Pipeline with jenkins gradle and artifactory
 #### Jenkins pipeline : chaining job execution 
 install plugins pipeline
     - Manage ling -> Manage plugins -> available -> build pipeline plugin -> install without restart
@@ -50,3 +51,25 @@ setup job and pipeline plugin
     - build section
         -> add build step -> invoke graddle script ->  use graddle executable -> make gradle executable -> apply
         -> build 
+## CI CD Pipeline with jenkins maven
+    - maven describe how our project will build and dependencies (in pom.xml)
+#### war vs jar
+    jar content librairies, ressources, properties files, war content web application (java files, jsp, ..) that can be deployed on a server 
+#### in jenkins we create a new job 
+    -> free style project
+    - check discard old build ( it clean a build history)
+    - git repository in jenkins job
+    - build environment section
+        -> check delete workspace before build starts (make sure previous buils do not affect the current build)
+    - add build step
+        3 options 
+        -> execute shell ( we use this option)
+            mvn package (do not forgot to configure mavene installation in manage jenkins section)
+            
+        -> invoke top level maven target
+        -> Invoke Artifactory maven 3
+    - add post buils action (it will use in pipeline)
+        -> archive the artifacts option -> files to archive = proejectname/target/*.war
+    - apply save
+
+
