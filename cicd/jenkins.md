@@ -91,4 +91,33 @@ setup job and pipeline plugin
 #### start pipeline
     go to pipeline -> run -> enable auto refresh
     
-
+## Relational db with jenkins and Sqitch
+    Sqitch is a db change management framework
+    first allow connection from jenkins to postegresql :
+        - update client authentication : vi /var/lib/pgsql/9.4/data/pg_hba.conf
+        - restart db : systemctl restart postgresql
+    second, enable connection from our jenkins machine
+        - in this course we only desable firewall : vi /etc/sysconf/selinux
+            SELINUX = desabled
+            SELINUXtYPE = targeted
+    Install PHPPgAdmin
+#### create new job (db_source)
+    source code = git -> https://..../db_test.git -> delete workspace... -> build triggers -> poll scm (when there is a push in the repo, job run) -> 
+    Schedule = H/5 * * * * ( check every 5 minutes if there is a commit) -> buid step -> execute shell -> 
+    command =   
+        cd $workspace
+        sqitch deploy db:pg:deploy:deploy@792.168.0.103:5432/tetranoodle
+        (pg : postgresql, deploy : user credential , tetranoodle : db name)
+    -> apply save
+#### create pipeline
+    -> install without restart : build pipeline pluggin
+    + -> view name = db_tetranoodle -> initial source = db_source -> check show options -> apply ok
+#### create another job (db_verify)
+    -> source code = git -> https://..../db_test.git -> build step -> execute shell -> 
+    command =   
+        cd $workspace
+        sqitch verify db:pg:deploy:deploy@792.168.0.103:5432/tetranoodle
+        (pg : postgresql, deploy : user credential , tetranoodle : db name)
+    -> save
+#### configure pipeline
+    got to db_source -> add post build action -> select db_verify
