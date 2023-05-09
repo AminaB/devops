@@ -121,3 +121,30 @@ setup job and pipeline plugin
     -> save
 #### configure pipeline
     got to db_source -> add post build action -> select db_verify
+    -> run pipeline
+## Secure jenkins instance, scaling jenkins infrastructure
+#### Secure
+    Manage jenkins -> configure global secure -> check enable security -> check random
+    -> acces control -> check jenkins own user databse -> check allow user to sign up
+    ...
+    -> authorization  ->matrix based security -> check all for root
+    we can create user in -> manage jenkins -> manage users ->...
+#### scaling jenkins by adding slave node
+    for exemple we have several projects , some of them need linux OS for testing and others need windows.
+    for this setup, it is essential to install linux and windows slave node (one of this could be a master).
+    our environnment : our host is a windows machine, jenkins is running in centos VM.
+    - for cluster setup we will install a jenkins slave agent on our windows machine and connect it to the master server running with 
+        CentOS VM.
+        -> install jenkins in windows host machine (localhost : 8080)  -> create admin user -> start using jenkins.
+            ( now we have two running instances of jenkins, centos en windows) 
+
+        -> in centos jenkins -> manage jenkins -> manage nodes -> new node (name it windowsOS) -> check permanent agent-> 
+        -> ok -> #of executors =2 -> remote root directory = c:\Program Files\Jenkins\ -> save
+        
+        -> click on our widowsOS isntance -> lauch -> it download a configuration file (.jnlp) -> run this file to lauch the agent 
+        
+    we can go now to jenkins homepage for our master and we will see two new executors in " buils executors status window"
+##### let's change the configuration of cluster such that all new jobs are assigned to our salve
+    in master -> click manage jenkins ->  Manage nodes -> click master node -> usage = "only build jobs ..." -> save
+    in master -> create new job (name it test)->  execute windows batch( because it wiil execute in windows node) -> command = echo test->
+    apply ans save -> build the job.
