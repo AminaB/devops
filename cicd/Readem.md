@@ -7,7 +7,7 @@
     - CI : process of automation the build and test of code every time a team member commits.
     - CD : process to build test configure and deploy from build to production.
 #### JAva, MAVEN & jenkins setup on aws Linux EC2 instance
-     crate two linux machine, one for code and jenkins for build, jenkins send war to second machine(with tomcat server) for deploy.
+     create two linux machine, one for code and one for jenkins build, jenkins send war to second machine(with tomcat server) for deploy.
     - ceate aws ec2 instance.
     - connect to EC2 instance in local machine
 #### connect to instance with ssh (secure shell, control a remote machine, ) client / and config
