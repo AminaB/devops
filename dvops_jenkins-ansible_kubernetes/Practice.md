@@ -70,3 +70,19 @@
         FROM tomcat:latest
         RUN cp -R /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
     docker build -t demotomcat .
+--------------------------------------------
+    Integrate docker with jenkins
+    create a user with admin right :
+        connect to docker host -> to see groups : cat /etc/group -> 
+        create user add add him to docker group : useradd dockeradmin, passwd dockeradmin , id dockeradmin ( to see the current group),
+        add group by : usermod -aG docker dockeradmin -> enable pwd authentication in ec2 instance -> vi /etc/ssh/sshd_config ->
+        un comment "PasswordAuthentication yes" and comment "PasswordAuthentication no" -> :wq -> service sshd reload ->
+        try to log with this user "dockeradmin"
+    add dockerhost to jenkins server :
+        install "publish over ssh" pluggin in jenkins
+        Manage jenkins -> configure system -> got o publish over ssh section -> add -> server name = dockerhost -> hostname =@ip ->
+        -> username = dockeradmin -> pwd=.. -> 
+    create job to pull code from github, build with maven, and copy the artefact onto the dockker host
+        job name = buildAnDdeployOntoContainer -> compy from = buildanddeploy -> ok -> delete post build actions section -> 
+        -> add post build actions -> send build artefact over ssh -> ssh server = dockerhost -> source files = webapp/target/*.war->
+        -> remove prefix = webapp/target  -> apply save 
