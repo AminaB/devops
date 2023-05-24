@@ -101,3 +101,14 @@
         docker run -d --name tomcatv1 -p 8086:8080 tomcat:v1
         
         acces to @dokerhostIP:8086/webapp
+------------------------------------------------------
+    automate build and deployment on docker container
+
+        to delete all containers : docker container prune 
+        to delete all images : docker image prune -a
+
+        go to job -> in post build actions -> exec command = cd /opt/docker; docker build -t regapp:v1 .; 
+        docker run -d --name registerapp -p 8087:8080 regapp:v1
+        run job 
+        
+    
