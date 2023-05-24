@@ -78,11 +78,26 @@
         add group by : usermod -aG docker dockeradmin -> enable pwd authentication in ec2 instance -> vi /etc/ssh/sshd_config ->
         un comment "PasswordAuthentication yes" and comment "PasswordAuthentication no" -> :wq -> service sshd reload ->
         try to log with this user "dockeradmin"
+-----------------------------------------------
     add dockerhost to jenkins server :
         install "publish over ssh" pluggin in jenkins
         Manage jenkins -> configure system -> got o publish over ssh section -> add -> server name = dockerhost -> hostname =@ip ->
         -> username = dockeradmin -> pwd=.. -> 
+----------------------------------------
     create job to pull code from github, build with maven, and copy the artefact onto the dockker host
         job name = buildAnDdeployOntoContainer -> compy from = buildanddeploy -> ok -> delete post build actions section -> 
         -> add post build actions -> send build artefact over ssh -> ssh server = dockerhost -> source files = webapp/target/*.war->
-        -> remove prefix = webapp/target  -> apply save 
+        -> remove prefix = webapp/target  -> apply save *
+------------------------------------------------
+    deployment process with dockerfile
+        create /opt/docker -> chown -R dockeradmin:dockeradmin docker -> mv /root/dockerfile /opt/docker ->
+        ->chown -R dockeradmin:dockeradmin /opt/docker.
+        
+        update job -> remote directory = //opt//docker -> save -> build
+        
+        update Docker file :
+            COPY ./*.war / usr/local/tomcat/webapps
+        docker build -t tomcat:v1 .
+        docker run -d --name tomcatv1 -p 8086:8080 tomcat:v1
+        
+        acces to @dokerhostIP:8086/webapp
