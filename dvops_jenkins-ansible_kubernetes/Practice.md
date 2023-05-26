@@ -111,4 +111,20 @@
         docker run -d --name registerapp -p 8087:8080 regapp:v1
         run job 
         
+#### integrate ansible in ci cd pipeline ( new ec2 instance)
+    setup an ec2 instance
+        name Ansible-Server
+    setup hostname
+        ansible-server
+        init 6 : to restart
+    create ansadmin user
+    add user to sudoers file
+        visudo
+    generate ssh keys
+    enable pwd based login
+        vi /etc/ssh/sshd_config
+        service sshd reload
+    install ansible
+        yum install ansible
     
+        
