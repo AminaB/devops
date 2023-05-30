@@ -163,5 +163,15 @@
         white ansible playbook in docker folder
             vi regapp.yml
         ansible-playbook regapp.yml
+------------------------------------------------
+    copy image on to dockerhub
+
+    for security reason, we can create our own dokcer registry on our local system ( jfrog artifactory, amazon docker registry, ..)
+       
+     create a dockerhub account
+        docker login 
+        create tag : docker tag imageid username/regapp:latest
+        docker push username/regapp:latest
+        
         
         
