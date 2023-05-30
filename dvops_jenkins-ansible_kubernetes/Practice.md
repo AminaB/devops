@@ -173,5 +173,13 @@
         create tag : docker tag imageid username/regapp:latest
         docker push username/regapp:latest
         
+  -----------------------------------------------------
+    Jenkins job to build image onto ansible
+        edit regapp.yml
+        ansible-playbook regapp.yml --check
+        nsible-playbook regapp.yml
         
-        
+        give this comman to jenkins server : ansible-playbook regapp.yml
+           update jenkins job (opy_artifacts-onto_ansible )
+            -> post build section -> exec command = ansible-playbook /opt/docker/regapp.yml -> apply save.
+            enable poll scm (to execute every minute)
