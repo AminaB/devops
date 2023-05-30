@@ -156,5 +156,12 @@
         chmod on the docker file
         docker build -t regapp:v1 .
         docker run -t --name regapp-server -p 8081:8080 regapp:v1
+--------------------------------------------------
+    ansible playbook to create image and container
+        add ansible host ip in /etc/ansible/hosts
+        copy ansible pub key in ansible host :  ssh-copy-id @ipansiblehost (or localhost)
+        white ansible playbook in docker folder
+            vi regapp.yml
+        ansible-playbook regapp.yml
         
         

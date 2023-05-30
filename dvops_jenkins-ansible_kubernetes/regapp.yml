@@ -1,0 +1,7 @@
+---
+- hosts: ansible
+  tasks:
+    - name : create docker image
+      command : docker build -t regapp:latest .
+      args:
+        chdir: /opt/docker
