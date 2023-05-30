@@ -146,3 +146,15 @@
         in jenkins -> manage jenkins -> configure system -> publish over ssh -> add ansible server -> use pwd authentication
     create job -> copy_artifacts-onto_ansible -> user copy from buildAndDeployOnContainer -> build triggers -> uncheck poll SCM
     -> post build actions -> chosse ansible-server -> clean Exec Command -> apply save -> build
+------------------------------------------
+    build an image and create container on ansible 
+        install docker on asnible server
+        add ansadmin in docker group : sudo usermod -aG docker ansadmin ( test id ansadmin to see group)
+        start docker service
+        build image :
+            add dockerfile in docker folder
+        chmod on the docker file
+        docker build -t regapp:v1 .
+        docker run -t --name regapp-server -p 8081:8080 regapp:v1
+        
+        
