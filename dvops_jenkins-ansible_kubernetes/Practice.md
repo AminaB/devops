@@ -141,4 +141,8 @@
                 ansible all -m ping
         
 ------------------------------------------
- 
+    integrate ansible with jenkins : 
+        create /opt/docker in ansible-server, add chown ansadmin in this directory
+        in jenkins -> manage jenkins -> configure system -> publish over ssh -> add ansible server -> use pwd authentication
+    create job -> copy_artifacts-onto_ansible -> user copy from buildAndDeployOnContainer -> build triggers -> uncheck poll SCM
+    -> post build actions -> chosse ansible-server -> clean Exec Command -> apply save -> build
