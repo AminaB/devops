@@ -126,5 +126,19 @@
         service sshd reload
     install ansible
         yum install ansible
-    
+--------------------------------------------------
+    integrate docker with ansible
+        in docker host : create user ansadmin with admin rigth
+            enable pwd based login
+        in ansible host
+            add hosts file 
+                vi /etc/ansible/host
+                    add docker ip address
+            copy ssh keys
+                add pub key in docker host (in authorized directory)
+                ssh-copy-id @ipdockerhost
+            Test connection
+                ansible all -m ping
         
+------------------------------------------
+ 
