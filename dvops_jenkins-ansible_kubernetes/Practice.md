@@ -183,3 +183,6 @@
            update jenkins job (opy_artifacts-onto_ansible )
             -> post build section -> exec command = ansible-playbook /opt/docker/regapp.yml -> apply save.
             enable poll scm (to execute every minute)
+  ------------------------------------
+    create container on dockerhost using ansible 
+    ansible-playbook deploy_regapp.yml --check

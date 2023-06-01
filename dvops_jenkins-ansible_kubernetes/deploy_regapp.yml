@@ -1,0 +1,5 @@
+---
+- hosts: dockerhost
+  tasks:
+    - name: create container
+      command: docker run -d --name regapp-server -p 8082:8080 valaxy/regapp:latest
