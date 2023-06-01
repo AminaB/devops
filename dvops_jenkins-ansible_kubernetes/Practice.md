@@ -109,8 +109,7 @@
 
         go to job -> in post build actions -> exec command = cd /opt/docker; docker build -t regapp:v1 .; 
         docker run -d --name registerapp -p 8087:8080 regapp:v1
-        run job 
-        
+        run job
 #### integrate ansible in ci cd pipeline ( new ec2 instance)
     setup an ec2 instance
         name Ansible-Server
@@ -191,4 +190,10 @@
     delete container before create
       ansible-playbook deploy_regapp.yml --check
       ansible-playbook deploy_regapp.yml
-  
+  ------------------------------------------
+    jenkins CI:CD to deploy on container unsing ansible 
+      in post build actions -> sleep 10; ansible-playbook /opt/docker/deploy-regapp.yml;-> 
+
+#### Kubernetes on AWS : containers management system 
+      installation 
+        
