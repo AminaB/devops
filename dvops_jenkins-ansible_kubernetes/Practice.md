@@ -185,4 +185,10 @@
             enable poll scm (to execute every minute)
   ------------------------------------
     create container on dockerhost using ansible 
-    ansible-playbook deploy_regapp.yml --check
+      ansible-playbook deploy_regapp.yml --check
+      ansible-playbook deploy_regapp.yml
+  --------------------------
+    delete container before create
+      ansible-playbook deploy_regapp.yml --check
+      ansible-playbook deploy_regapp.yml
+  
