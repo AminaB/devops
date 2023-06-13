@@ -195,5 +195,14 @@
       in post build actions -> sleep 10; ansible-playbook /opt/docker/deploy-regapp.yml;-> 
 
 #### Kubernetes on AWS : containers management system 
-      installation 
-        
+      installation (go to install folder, there is the instructions)
+        create ec2 instance (choose t2.micro)
+        create cluster
+--------------------------------------------
+      create cluster
+        cluster name = valaxy
+        region = us-east-1 (check it in ec2 instace)
+        node-type = t2-small
+-------------------------------------------------
+      create manifest file  (https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/)
+        create file pod.yaml
