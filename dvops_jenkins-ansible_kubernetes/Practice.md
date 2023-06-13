@@ -206,3 +206,9 @@
 -------------------------------------------------
       create manifest file  (https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/)
         create file pod.yaml
+        create pod : kubectl apply -f pod.yml
+             kubectl get all
+      create servive manifest file 
+          create pod : kubectl apply -f service.yml
+             kubectl get all
+      kubectl describe service/demo-service
