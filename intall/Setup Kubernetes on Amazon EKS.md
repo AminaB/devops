@@ -1,6 +1,7 @@
 Setup Kubernetes on Amazon EKS
 
-You can follow same procedure in the official AWS document Getting started with Amazon EKS – eksctl
+You can follow same procedure in the official AWS document:  Getting started with Amazon EKS – eksctl
+
 Pre-requisites:
 
     an EC2 Instance
