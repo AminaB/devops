@@ -212,3 +212,12 @@
           create pod : kubectl apply -f service.yml
              kubectl get all
       kubectl describe service/demo-service
+#### integrate kubernetes in ci cd pipeline 
+      kubectl delete pod demo-pod
+      kubectl delete service demo-service
+______________________
+      write deployment file 
+      regapp-deployment.yml
+      write service file for deployment
+      regapp-service.yml
+      
