@@ -220,4 +220,9 @@ ______________________
       regapp-deployment.yml
       write service file for deployment
       regapp-service.yml
+--------------------------------------
+    create deployment and service file to create and access pod
+      kubectl apply -f regapp-deployment.yml (it will create 3 pods)
+      kubectl apply -f regapp-service.yml (it will create a Loadbalancer)
+
       
