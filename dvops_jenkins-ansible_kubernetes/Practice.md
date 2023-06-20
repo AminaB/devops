@@ -246,8 +246,12 @@ ______________________
     
     -> apply-> build (before build delete the existing node)
 -------------------------------------------
-  CI Job to create image for kubernetes
-  go to jenkins page
-  new job (Regapp_CI_Job) -> Copy from = Copy_artifact_ontoAnsible-> ok -> Excec command  = ansible-playbook -i /opt/docker/Create_image_reapp.yml;
-  -> build.
+    CI Job to create image for kubernetes
+    go to jenkins page
+    new job (Regapp_CI_Job) -> Copy from = Copy_artifact_ontoAnsible-> ok -> Excec command  = ansible-playbook -i /opt/docker/Create_image_reapp.yml;
+  
+----------------------------------------
+    pipeline ci cd
+     go to job (Regapp_CI_Job) -> add post build action -> buil other project -> Regapp_CJ_Job-> trigger only if build is stable
+      
   
