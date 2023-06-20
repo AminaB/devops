@@ -160,8 +160,8 @@
         add ansible host ip in /etc/ansible/hosts
         copy ansible pub key in ansible host :  ssh-copy-id @ipansiblehost (or localhost)
         white ansible playbook in docker folder
-            vi regapp.yml
-        ansible-playbook regapp.yml
+            vi create_image_regapp.yml
+        ansible-playbook create_image_regapp..yml
 ------------------------------------------------
     copy image on to dockerhub
 
@@ -174,25 +174,25 @@
         
   -----------------------------------------------------
     Jenkins job to build image onto ansible
-        edit regapp.yml
-        ansible-playbook regapp.yml --check
-        nsible-playbook regapp.yml
+        edit create_image_regapp.yml
+        ansible-playbook create_image_regapp.yml --check
+        nsible-playbook reate_image_regapp.yml
         
-        give this comman to jenkins server : ansible-playbook regapp.yml
+        give this comman to jenkins server : ansible-playbook create_image_regapp.yml
            update jenkins job (opy_artifacts-onto_ansible )
-            -> post build section -> exec command = ansible-playbook /opt/docker/regapp.yml -> apply save.
+            -> post build section -> exec command = ansible-playbook /opt/docker/reate_image_regapp.yml -> apply save.
             enable poll scm (to execute every minute)
   ------------------------------------
     create container on dockerhost using ansible 
-      ansible-playbook deploy_regapp.yml --check
-      ansible-playbook deploy_regapp.yml
+      ansible-playbook docker_deployment.yml --check
+      ansible-playbook docker_deployment.yml
   --------------------------
     delete container before create
-      ansible-playbook deploy_regapp.yml --check
-      ansible-playbook deploy_regapp.yml
+      ansible-playbook docker_deployment.yml --check
+      ansible-playbook docker_deployment.yml
   ------------------------------------------
     jenkins CI:CD to deploy on container unsing ansible 
-      in post build actions -> sleep 10; ansible-playbook /opt/docker/deploy-regapp.yml;-> 
+      in post build actions -> sleep 10; ansible-playbook /opt/docker/docker_deployment.yml;-> 
 
 #### Kubernetes on AWS : containers management system 
       installation (go to install folder, there is the instructions)
@@ -225,4 +225,25 @@ ______________________
       kubectl apply -f regapp-deployment.yml (it will create 3 pods)
       kubectl apply -f regapp-service.yml (it will create a Loadbalancer)
 
+ --------------------------------
+    integrate kubernetes bootstrap server with ansible
+      connect to ansile server
+        create ansadmin user, add it to sudo file, enable pawd based authentication. psswd ansadmin, service sshd reload.
+        add ansadmin key onto root user: ssh-copy-id root@ipkubernetes ( add password to root user on  kubernetes)
+        log with ansadmin 
+        create hosts file in /docker
+        ssh-copy-id @ipkubernest
+---------------------
+    create ansible playbook
+      kube_deploy.yml
+      kube_service.yml
+    run playbooks files with hosts in option
+-----------------------------------------------
+    create jenkins deployment for kubernetes
+    go to jenkins page
+    new job (Deploy_on_Kubernetes) -> freestyle project -> add post build post action-> name server= ansible-server ->
+    -> Exec command =   ansible-playbook -i /opt/docker/hosts /opt/docker/kube_deploy.yml;
+    
+    -> apply-> build (before build delete the existing node)
       
+  
