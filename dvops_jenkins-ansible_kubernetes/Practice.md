@@ -1,6 +1,12 @@
 # Simple Devops Project 
+
+    
     github, kuberntes, github, aws, docker jenkins, maven, ansible 
 ## create EC2 instance for jenkins server and active port 8080, and install
+------------------------------------
+link :
+https://www.valaxytech.com/
+https://github.com/yankils/Simple-DevOps-Project
 -----------------------------------------------------------------------
     connect to ec2 
         ssh -i aminatou_key_pair.pem ec2-user@13.50.246.245
@@ -254,4 +260,11 @@ ______________________
     pipeline ci cd
      go to job (Regapp_CI_Job) -> add post build action -> buil other project -> Regapp_CJ_Job-> trigger only if build is stable
       
-  
+  ------------------------------------
+    terminate instances
+    kubectl deployment.apps/valaxy-regapp
+    kubectl service/valaxy-service
+
+    delete cluster 
+    kubectl get nodes
+    eksctl delete cluster valaxy --region ap-south-1(replace with your region)
