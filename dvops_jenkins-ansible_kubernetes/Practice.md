@@ -241,9 +241,13 @@ ______________________
 -----------------------------------------------
     create jenkins deployment for kubernetes
     go to jenkins page
-    new job (Deploy_on_Kubernetes) -> freestyle project -> add post build post action-> name server= ansible-server ->
+    new job (Regapp_CD_Job) -> freestyle project -> add post build post action-> name server= ansible-server ->
     -> Exec command =   ansible-playbook -i /opt/docker/hosts /opt/docker/kube_deploy.yml;
     
     -> apply-> build (before build delete the existing node)
-      
+-------------------------------------------
+  CI Job to create image for kubernetes
+  go to jenkins page
+  new job (Regapp_CI_Job) -> Copy from = Copy_artifact_ontoAnsible-> ok -> Excec command  = ansible-playbook -i /opt/docker/Create_image_reapp.yml;
+  -> build.
   
