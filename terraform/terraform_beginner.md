@@ -1,8 +1,8 @@
 
-aws cours 
+aws course 
 
-ARN : amazon ressource name 
-CLI version : Commande line interface 
+ARN : amazon resource name 
+CLI version : Command line interface 
 aws --version
 
 aws ec2 describe-instances 
@@ -38,14 +38,14 @@ see policies attached to a group
 aws --endpoint http://aws:4566 iam list-attached-group-policies --group-name project-sapphire-developers
 
 --------------------------------------------
-provisionning iam ressources with terraform
+provisioning iam resources with terraform
 resource "aws_iam_user" "admin-user"{
 	name="lucy"
 	tags={
 	Description="Lead"
 	}
 }
-NB : berfore to create resource, we have to add provider with credentials arguments to allow terraform to deploy our ressource
+NB : before to create resource, we have to add provider with credentials arguments to allow terraform to deploy our ressource
 provider "aws"{
 	region=""
 	acces_key=""
@@ -71,7 +71,7 @@ resource "aws_iam_policy" "adminUser"{
 		{
 			"Effect": "Allow"
 			"Action" : "*"
-			"Ressource": "*"
+			"Resource": "*"
 
 		}
 	]
@@ -81,7 +81,7 @@ resource "aws_iam_policy" "adminUser"{
 }
 we can also move json on file admin-policy.json and do policy=file(admin-policy.json). in this cas we don't need EOF
 - attach to user 
-ressource "aws_iam_user_policy_attachement" "lucy-admin-acess"{
+resource "aws_iam_user_policy_attachment" "lucy-admin-access"{
 	user = aws_iam_user.admin.user.name
 	policy_arn=aws_iam_policy.adminUser.arn
 }
@@ -89,25 +89,25 @@ ressource "aws_iam_user_policy_attachement" "lucy-admin-acess"{
 AWS S3 : simple storage service in aws platform
 data in s3 storage in the form of S3 bucket (container or directory)
 in the bucket every thing is object
-when we create a bucket, aws also create automacally a dsn for it
+when we create a bucket, aws also create automatically a dsn for it
 bucket name : must be unique (no upper case or _ )
 
 bucket with terraform 
 
 -create a bucket  
-ressource "aws_s3_bucket" "finance"{
+resource "aws_s3_bucket" "finance"{
 	bucket ="finance-2100000"
 	tags={
 	Description=""
 	}
 }
 -create a object in bucket 
-ressource "aws_s3_bucket_object" "finance-2020"{
+resource "aws_s3_bucket_object" "finance-2020"{
 	source ="/root/finance/fincance-2020.doc"
 	key="finance-2020.doc"
 	bucket="aws_S3_bucket.finance.id"
 }
--who can acess in this bucket (policy)
+-who can access in this bucket (policy)
 	create iam group aws_iam_group with name finance-data, 
 	s3 bucket policy like iam policy with :
 	policy=<<EOF
@@ -117,7 +117,7 @@ ressource "aws_s3_bucket_object" "finance-2020"{
 			{
 				"Effect": "Allow",
 				"Action" : "*",
-				"Ressource": "arn:aws:s3:::${aws_s3_bucket.finance.id}/",
+				"Resource": "arn:aws:s3:::${aws_s3_bucket.finance.id}/",
 				"Principal":{
 					"AWS": [
 						"${data.aws_iam_group.finance-data.arn}"
@@ -156,7 +156,7 @@ resource "aws_dynamodb_table_item" "car-items"{
 ---------------------
 Remote state 
 
- do note push state file in git repo
+ do not push state file in git repo
  do not run terraform file in same time
  ---------------------
  Remote backend
@@ -172,24 +172,24 @@ Remote state
 
  	}
  }
- affter running terraform apply, we can delete the state file. the state file will not be in the local configuration anymore
+ after running terraform apply, we can delete the state file. the state file will not be in the local configuration anymore
  to view state file : terraform state pull 
  --------------------------------
  terraform state command
 
- terraform state list : list f createtd ressource
- terraform state show resource : details of ressource
- terraform state mv source destionation : move items to one state file to another (rename table for example)
+ terraform state list : list f created resource
+ terraform state show resource : details of resource
+ terraform state mv source destination : move items to one state file to another (rename table for example)
  terraform state pull : to view state file in s3 storage
- terraform state rm ressource_adress : remove only in terrraform mangement.
+ terraform state rm resource_address : remove only in terraform management.
 
  ----------------------------------
  EC2 instance : elastic instance cloud , it is virtual machine in the cloud 
 
-deploy EC2 instnacr with terraform 
+deploy EC2 instance with terraform 
 ami : amazon image
 
-ressource "aws_instance" "webserver"{
+resource "aws_instance" "webserver"{
 	ami = "ami-..."
 	instance_type = "t2.micro"
 	tags={
@@ -208,14 +208,14 @@ ressource "aws_instance" "webserver"{
 
 }
 create ssh key :
-ressource "aws_key_pair" "web" {
+resource "aws_key_pair" "web" {
 	public_key =file (.../web.pub) or 
 	public_key ="ssh-
 	rsa AAAAAAAAAAAAAAAAAbbiyhghxcjhvbjk................."
 }
 
-create a ssh accss
-ressource "aws_security_group" "ssh-access"{
+create a ssh access
+resource "aws_security_group" "ssh-access"{
 	name =""
 	description="Allow ssh access from the internet"
 	ingress{
@@ -227,8 +227,8 @@ ressource "aws_security_group" "ssh-access"{
 }
 
 -----------------------------
-terraform provionners : it is inside the ressource block 
-provisionner "remote-exec"{
+terraform provisioners : it is inside the resource block 
+provisioner "remote-exec"{
 	inline=[
 		"sudoe apt update ",
 		"sudo apt install ..",
@@ -238,11 +238,11 @@ provisionner "remote-exec"{
 
 to save the public ip : 
 
-provisionner "local_exec"{
+provisioner "local_exec"{
 	command="echo ${aws_instance.webserver.public_ip} >> /tmp/ips.txt"
 }
 
-we cans also have connaction block inside ressource block : 
+we cans also have connection block inside resource block : 
 connection {
 	
 	type ="ssh"
@@ -257,7 +257,7 @@ Modules
 
 https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest/submodules/iam-user
 
-to resolve duplacated code issues
+to resolve duplicated code issues
 
 module "dev-webserver" {
 	source ="../aws-instance"
@@ -272,7 +272,7 @@ functions in terraform
 
 list(), toset(), file(), ...
 
-lunch interractive console to try some functions: 
+lunch interactive console to try some functions: 
 terraform console 
 --------------------------------
 Conditional expressions 
@@ -280,7 +280,7 @@ Conditional expressions
 condition ? true_val : false_val
 EX : 
 resource "radom_psw" "psw-generator"{
-	legth= var.length < 8 ? 8 : var.length
+	length= var.length < 8 ? 8 : var.length
 
 }
 
@@ -315,8 +315,8 @@ workspace
 
 avoid repetition steps in different configurations directory
 
-terraformm workspace new ProjectA
-terraformm workspace list
+terraform workspace new ProjectA
+terraform workspace list
 
 create resource based a workspace :
 configured variable.tf to have different value for variables 
