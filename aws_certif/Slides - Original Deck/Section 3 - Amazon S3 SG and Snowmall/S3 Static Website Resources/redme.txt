@@ -1,0 +1,23 @@
+In this lesson, we learn how to configure am Amazon S3 Bucket to host static websites.  The resources section include an index.html, error.html file and a jpg image.  Download these files to a folder on your desktop.  Create a new S3 bucket and ensure that block public access is set to off. 
+
+Next, upload the error.html and the image to your bucket ensuring that they have Public Access set to enabled.  You should then make a note of the bucket name and the image name with extension.  Next, edit your index.html file which you download to correct the img src tag section as shown below.  Then save the file and upload it to the S3 bucket.  Follow the on-screen demo in the video to test your static website.
+
+
+
+<html>
+
+<title>Welcome to IaaS Academy</title>
+
+<body>
+
+<center>
+
+<h1>Preparing for the AWS Certified Cloud Practitioner Exam</h1><p>
+
+<!–– In the Img tag below, ensure that you first create a bucket and upload the image in the resource section to that bucket.  Then ensure that you type in the correct bucketname and the image filename with the jpg extension in the IMG tag below ––>
+
+<img src="https://yourbucketname.s3.amazonaws.com/awscloudpractitioner.jpg" alt="AWS Practice Exams">
+
+</center>
+
+</body></html>
