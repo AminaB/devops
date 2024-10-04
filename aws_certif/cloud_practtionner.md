@@ -1,1 +1,1 @@
-shared responsability
+shared responsibility
