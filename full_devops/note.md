@@ -31,3 +31,4 @@ Devops lifecycle
 Linux :
 - server linux os : red hat, ubuntu server, centos,..
 - desktop linux : ubuntu, debian,...
+- to see architecture of the cpu tape command: arch
