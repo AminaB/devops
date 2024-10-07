@@ -22,7 +22,7 @@ vagrant vs terraform : both projects from HashiCorp.
 
 Website setup using vagrant provisioning
 - centos : http server & html template
-     - vagrant init centos....
+     - vagrant init centos...., change the ip address and active public network and vb.memory in vigrant file
      - vagrant ssh, and change the hostname to "finance" : vi /etc/hostname, logout and login again
      - yum install httpd wget vim unzip zip -Y
      - systemctl start httpd
@@ -34,3 +34,7 @@ Website setup using vagrant provisioning
      - unzip name, cd into unzip ,  cp -r * /var/www/html, and restart httpd, and test
      - check firewall, systemctl status firewall (stop and disable it)
 - ubuntu : Lamp, and wordpress template
+    - vagrant init ubuntu20....change the ip address and active public network, and vb.memory
+    - vagrant ssh, and change the hostname to "wordpress" : vi /etc/hostname, logout and login again
+    - read and install everything : https://ubuntu.com/tutorials/install-and-configure-wordpress#1-overview
+    - or do it with bootstrapping into vagrantfile (iac)
