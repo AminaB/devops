@@ -126,5 +126,33 @@ end
 # Systemctl & apache tomcat
 - tomcat is a service from apache like http sercie, tomcat host java based web app, http host static content
 - we cannot use systemctl to manage tomcat by default like http, we need to install it
+
 - build centos vm using vagrant
 - ls /usr/lib/systemd/system : to see config files for systemctl command (we will see http.service here)
+- download tomcat 10 : wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.30/bin/apache-tomcat-10.1.30.tar.gz
+- extract : tar xzvf apache-tomcat....
+- tomcat need java to be installed : dnf install java17...
+- to start tomcat service run : ./bin/startup.sh
+- ip addr show : and put into browser to see welcome page
+
+## write systemd file for tomcat to run it without the bash script
+- add user : useradd --home-dir /opt/tomcat -- shell /sbin/nologin tomcat
+- cp tomcat folder to home directory : cp -r apache-tomcat.../* /opt/tomcat/
+- chown - R tomcat.tomcat /opt/tomcat
+- create systemd: vim /etc/systemd/system/tomcat.service
+    `[Unit]
+     Description=Tomcat
+     After=network.target`
+    `[Service]
+    Type=forking
+    User=tomcat
+    Group=tomcat
+    WorkingDirectory=/opt/tomcat
+    Environment=JAVA_HOME=/usr/lib/jvm/jre
+    Environment=CATALINA_HOME=/opt/tomcat
+    Environment=CATALINE_BASE=/opt/tomcat
+    ExecStart=/opt/tomcat/bin/startup.sh
+    ExecStop=/opt/tomcat/bin/shutdown.sh`
+    `[Install]
+    WantedBy=multi-user.target`
+- now you can do : systemctl start tomcat
