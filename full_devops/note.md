@@ -5,7 +5,7 @@ login to sonarcloud
 
 
 aws : 
- certificate the domain name which I bought in godaddy in aws certificate manger service 
+ certificate the domain name which I bought in godaddy in aws certificate manager service 
 - Fully qualified domain name = *.barryit.xyz
 - add record to godaday dns by adding cname and cname value of certificate
 - iam user alias : aminainfo
@@ -32,3 +32,7 @@ Linux :
 - server linux os : red hat, ubuntu server, centos,..
 - desktop linux : ubuntu, debian,...
 - to see architecture of the cpu tape command: arch
+
+vagrant vs terraform : both projects from HashiCorp.
+- Vagrant is for development environments. Terraform is for more general infrastructure management.
+- vagrant provisioner : shell. config.vm.provision "shell" (in vagrant file)
