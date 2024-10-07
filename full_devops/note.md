@@ -33,6 +33,4 @@ Linux :
 - desktop linux : ubuntu, debian,...
 - to see architecture of the cpu tape command: arch
 
-vagrant vs terraform : both projects from HashiCorp.
-- Vagrant is for development environments. Terraform is for more general infrastructure management.
-- vagrant provisioner : shell. config.vm.provision "shell" (in vagrant file)
+
