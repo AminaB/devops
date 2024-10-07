@@ -76,16 +76,16 @@
     `cat > /etc/apache2/sites-available/wordpress.conf <<EOF
     <VirtualHost *:80>
     DocumentRoot /srv/www/wordpress
-    <Directory /srv/www/wordpress>
-    Options FollowSymLinks
-    AllowOverride Limit Options FileInfo
-    DirectoryIndex index.php
-    Require all granted
-    </Directory>
-    <Directory /srv/www/wordpress/wp-content>
-    Options FollowSymLinks
-    Require all granted
-    </Directory>
+        <Directory /srv/www/wordpress>
+            Options FollowSymLinks
+            AllowOverride Limit Options FileInfo
+            DirectoryIndex index.php
+            Require all granted
+        </Directory>
+        <Directory /srv/www/wordpress/wp-content>
+            Options FollowSymLinks
+            Require all granted
+        </Directory>
     </VirtualHost>
     EOF`
 
@@ -109,3 +109,22 @@
      `SHELL`
 - vagrant up 
 
+# Multi vagrant files 
+- ex : web server, and database (multiple vm)
+
+`Vagrant.configure("2") do |config|
+      config.vm.provision "shell", inline: "echo Hello"
+          config.vm.define "web" do |web|
+          web.vm.box = "apache"
+      end
+          config.vm.define "db" do |db|
+          db.vm.box = "mysql"
+      end
+end
+      `
+
+# Systemctl & apache tomcat
+- tomcat is a service from apache like http sercie, tomcat host java based web app, http host static content
+- we cannot use systemctl to manage tomcat by default like http, we need to install it
+- build centos vm using vagrant
+- ls /usr/lib/systemd/system : to see config files for systemctl command (we will see http.service here)
