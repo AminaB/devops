@@ -4,7 +4,7 @@ create dockerhub account
 login to sonarcloud
 
 
-aws : 
+# aws : 
  certificate the domain name which I bought in godaddy in aws certificate manager service 
 - Fully qualified domain name = *.barryit.xyz
 - add record to godaday dns by adding cname and cname value of certificate
@@ -17,7 +17,7 @@ SDLC Agile
 
 Dev are agile and do regular and quick change, ops are looking fo stability
 
-Devops : 
+# Devops : 
 - reduce time to market :
 - fix code delivery issues
 - ops and dev communicate
@@ -25,17 +25,18 @@ Devops :
 - train ops to be agile
 - automation in every level
 
-Devops lifecycle
+# Devops lifecycle
 - commit -> build -> integration test -> code analyse -> delivery -> db/sec changes ->  software testing -> deploy -> user approval -> keep monitoring
 
-Linux :
+# Linux :
 - server linux os : red hat, ubuntu server, centos,..
 - desktop linux : ubuntu, debian,...
 - to see architecture of the cpu tape command: arch
 
-Iac
+# Iac
 - Infrastructure as code (IaC) is the process of managing and provisioning infrastructure (networks, virtual machines, load balancers, and connection topology) through CODE/Config Files.
 - Vagrant for local
 - Terraform for Cloud
 - Ansible for Servers
 - Cloudformation for AWS
+
