@@ -20,23 +20,27 @@
 - NFS : shared storage
 - Rabbit MQ connected to tomcat : Message broker, queueing agent
 - Meme cache : connected to mysql to cache user information
-- Mysql db
-- 
+- MariaDb
 
-# Prerequisites
-#
-- JDK 11
-- Maven 3
-- MySQL 8
+# manual installation
+- run vagranfile based on your os to install VMS
+## db01
+- see doc into : /home/aminatou/Documents/cours/devops/full_devops/VProfileProject/vagrant/Manual_provisioning_WinMacIntel/VprofileProjectSetupWindowsAndMacIntel.pdf
+- yum install epel-release -Y : for extra repo
+- install maria db and git into db01 vm 
+- start and enable mariadb 
+- config security my running  : mysql_secure_installation
+- setup db : mysql -u roo -padmin123, grant privilege to admin to connect remotely, flush privileges
+- use script accountsdb.sql to create db 
+- restart serice
 
-# Technologies
-- Spring MVC
-- Spring Security
-- Spring Data JPA
-- Maven
-- JSP
-- Tomcat
-- MySQL
-- Memcached
-- Rabbitmq
-- ElasticSearch
+## memecahe : mc01
+- see doc : /home/aminatou/Documents/cours/devops/full_devops/VProfileProject/vagrant/Manual_provisioning_WinMacIntel/VprofileProjectSetupWindowsAndMacIntel.pdf
+
+## rabbitmq : rmq01
+- see doc : /home/aminatou/Documents/cours/devops/full_devops/VProfileProject/vagrant/Manual_provisioning_WinMacIntel/VprofileProjectSetupWindowsAndMacIntel.pdf
+
+## tomcat : app01
+- see doc : /home/aminatou/Documents/cours/devops/full_devops/VProfileProject/vagrant/Manual_provisioning_WinMacIntel/VprofileProjectSetupWindowsAndMacIntel.pdf
+
+## nginx : web01
