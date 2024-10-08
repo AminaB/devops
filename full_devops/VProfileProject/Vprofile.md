@@ -44,3 +44,6 @@
 - see doc : /home/aminatou/Documents/cours/devops/full_devops/VProfileProject/vagrant/Manual_provisioning_WinMacIntel/VprofileProjectSetupWindowsAndMacIntel.pdf
 
 ## nginx : web01
+
+# automated
+- open terminal in VProfileProject/vagrant/Automated_provisioning_WinMacIntel and run vagrant up 
