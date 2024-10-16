@@ -108,3 +108,4 @@
 - add target group, add LB for this target group
 - create ASG -> select lunch template for IAM -> select all zones
 - attach LB ->select TG ->
+
