@@ -24,7 +24,7 @@ Multi tier web app stack : Vprofile project using vagrant
 - 
 ### Aws services
 - EC2 -> replace VM (tomcat rabbitMQ, MEMCACHE, MYSQL)
-- ELB -> Replace GINX LB
+- ELB -> Replace NGINX LB
 - ASG : automatically adding severs as we need or get rid of them
 - S3/EFS : for shared storage (like images), or file system
 - Amazon certificate manager : secure website (https) 
@@ -42,21 +42,21 @@ Multi tier web app stack : Vprofile project using vagrant
 ### workflow (us-east-1)
 - login to aws account (use iam user with admin access not root)
 - create Certificate in ACM for my godaddy domain : barryit.xyz
-- create SGs (for LB, EC2s, and backend services: mysql, memcache, rabbit mq)
+- create SGs (for LB, EC2s, and backend services: mysql, memcached, rabbit mq)
     - LB SG  : allow http traffic and https from everywhere
     - EC2 SG (tomcat) : allow http traffic from LB SG
         - 22 from my Ip Only (you ip might change each day, make sure to update the rule)
         - 8080 from my IP (for troubleshooting if needed)
     - Back end SG : allow :
         - 3306 from EC2s: for mysql 
-        - 11211 from EC2s : for memcache
+        - 11211 from EC2s : for memcached
         - 5672 from EC2s: for Rabbit MQ
         - all traffic : for the SG itself (internal traffic on all port)
         - 22 from my ip 
 - create Key Pairs to log into EC2 instances using ssh
 - Launch instances with user data (bash scripts)
   - name : vprofile-db01 : with mysql.sh as user data. choose the backend security group and amazon linux
-  - name : vprofile-mc01 : with memcache.sh as user data. choose the backend security group and amazon linux
+  - name : vprofile-mc01 : with memcached.sh as user data. choose the backend security group and amazon linux
   - name : vprofile-rmq01 : with rabbitmq.sh as user data. choose the backend security group and amazon linux
 
   - name : vprofile-app01 : with rabbitmq.sh as user data. choose the app security group and ubuntu os
@@ -78,7 +78,7 @@ Multi tier web app stack : Vprofile project using vagrant
   - ssh -i vprofile-prodd-key.pem ubuntu@54.90.182.183
   - systemctl status tomcat9
   -  ls /var/lib/tomcat9/
-- update ip to name mapping in Route 53 (in vagrant we use to use /etc/hosts file to map name to a VM ip, it is local) 
+- update ip to name mapping in Route 53 (in vagrant we used to use /etc/hosts file to map name to a VM ip, it is local) 
   - go to route 53 in aws console
   - create "hosted zone"
   - name : vprofile.in
@@ -95,7 +95,7 @@ Multi tier web app stack : Vprofile project using vagrant
   - configure aws cli with the acces keys : aws configure
   - create s3 with cli : aws s3 mb s3://aminatoucoder-vpro-arts
   - copie artificat in s3 :  aws s3 cp target/vprofile-v2.war s3://aminatoucoder-vpro-arts
-- copy artifact in s3 to tomcat ec2 instance
+- copy artifact from s3 to tomcat ec2 instance
   - create iam role for ec2 instance to Allows EC2 instances to use S3 service (full access) : aminacoder-vprofile-role
   - attach aminacoder-vprofile-role to app01 via actions -> security
   - ssh to app01
@@ -110,7 +110,7 @@ Multi tier web app stack : Vprofile project using vagrant
   - systemctl start tomcat9 (ROOT will be extracted)
 - setup elb with https
   - create target group : name vprofile-app-TG, http : 8080, health check path : /login, override port : 8080, healthy threshold :2 , select instance : app01, click on pending below
-  - create App LB : name vprofile-prod-elb, select all AZ, select  ELB QG, add https listenner, and the certificate 
+  - create App LB : name vprofile-prod-elb, select all AZ, select  ELB SG, add https listener, and the certificate 
 - map elb to website name in godaddy dns
   - copy dsn name from elb and add record in godaddy -> DNS -> add record (with value : vprofile-prod-elb-1448622209.us-east-1.elb.amazonaws.com)
 - verify
@@ -121,4 +121,5 @@ Multi tier web app stack : Vprofile project using vagrant
   - create ASG : vprofile-app-ASG, select all zones, add TG, tags,...
   - terminate app01
   - enable stickiness in TG
+  - test
   

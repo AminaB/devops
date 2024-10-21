@@ -1,7 +1,7 @@
 # aws
-- use static public ip to avoid ip changing when you powert off your instance (elastic ip)
+- use static public ip to avoid ip changing when you power off your instance (elastic ip)
 - use cli : create user "awscli" with access key
-- install as-cli 
+- install aws-cli 
 - and run : aws configure
 
 # aws command
@@ -57,7 +57,7 @@
 - mount the volume permanently to /var/lib/mysql (create the directory before)
 - install mariadb : apt install mariadb
 - systemctl start mariadb
-- go to aws console and create ebs snapshot of this vol
+- go to aws console and create ebs snapshot for this vol
 
 - in ec2 instance : remove everything in /var/lib/mysql
 - stop mariadb
