@@ -95,10 +95,10 @@ objective : flexible infra, no upfront cost, Iaac, paas
 - create elastic beanstalk environment
   - platform service
   - create iam role
-  - Ec2
-  - policy : AWSElasticBeanstalkWebTier, AdministratorAccess-AWSElasticBeanstalk, AWSElasticBeanstalkRoleSNS, AWSElasticBeanstalkCustomPlatformforEC2Role
-  - role name : vprofile-bean-role
-  - create
+    - Ec2
+    - policy : AWSElasticBeanstalkWebTier, AdministratorAccess-AWSElasticBeanstalk, AWSElasticBeanstalkRoleSNS, AWSElasticBeanstalkCustomPlatformforEC2Role
+    - role name : vprofile-bean-role
+    - create
   - create beanstalk application
     - name : vprofile-app
     - env name : vprofile-app-prod
@@ -126,7 +126,7 @@ objective : flexible infra, no upfront cost, Iaac, paas
     - sessions -> enabled check
     - add https in listener with port 443 (configuration -> edit "Instance traffic and scaling" -> go to "listener"). and choose the certificate 
     - health check will be (severe) because we don't have /login yet (we need to add the project)
-- update SG of backend to allow traffic from bean SG
+- update SG of backend to allow traffic from elastic beanstalk EC2s SG
   - copy the SG id from ec2 created by beanstalk, to backend SG (allow all traffic from instance SG) or we can also allow traffic from EC2 only on 3 ports (mysql, elastic cache, rabbitMQ)
 
 - build artifact with backend info
@@ -143,7 +143,7 @@ objective : flexible infra, no upfront cost, Iaac, paas
   - remove cname record to LB on godaddy
   - in aws console open cloudfront service, create -> select beanstalk elb -> https only or Match viewer ->
   - -> select the "legacy cache setting" -> header = All -> query string = All -> cookies = all
-  - WAF = do not enable
+  - WAF = do not enable (not free)
   - alternate domain name= vprofile.barryit.xyz -> select certificate -> security policy = tlSv1
 - update entry in goDaddy dsn zone
   - CNAME name = vprofile and value =dc5fzhfuyvwc9.cloudfront.net

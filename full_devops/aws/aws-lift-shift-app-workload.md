@@ -34,9 +34,9 @@ Multi tier web app stack : Vprofile project using vagrant
 - user access by using url (this url mentioned in goDaddy DSN)
 - this endpoint connect to the LB using https, the certificate for https encryption will be in ACM
 - the ALB SG allow only https traffic
-- the ALB route to Tomcat in set of EC2 manged by ASG (these ec2 instances are in the same SG AND allow traffic on 8080 only from LB)
+- the ALB route to Tomcat in set of EC2 managed by ASG (these ec2 instances are in the same SG AND allow traffic on 8080 only from LB)
 - information of backend services like mysql,... will be mentioned in Route 53
-- MemCache, Rabbit MQ, Mysql will be in the same SG
+- MemCached, Rabbit MQ, Mysql will be in the same SG
 - Software artifact will be in S3 bucket
 
 ### workflow (us-east-1)
@@ -59,7 +59,7 @@ Multi tier web app stack : Vprofile project using vagrant
   - name : vprofile-mc01 : with memcached.sh as user data. choose the backend security group and amazon linux
   - name : vprofile-rmq01 : with rabbitmq.sh as user data. choose the backend security group and amazon linux
 
-  - name : vprofile-app01 : with rabbitmq.sh as user data. choose the app security group and ubuntu os
+  - name : vprofile-app01 : with tomcat_ubuntu.sh as user data. choose the app security group and ubuntu os
 - connect to db01 using ssh (add permission to.pem)
     - ssh -i vprofile-prodd-key.pem ec2-user@98.83.154.170
     - sudo -i
@@ -92,9 +92,9 @@ Multi tier web app stack : Vprofile project using vagrant
 - push artifact to s3 bucket
   - create iam user (s3admin with s3 full access policy)
   - create access keys for s3admin user with CLI access
-  - configure aws cli with the acces keys : aws configure
+  - configure aws cli with the access keys : aws configure
   - create s3 with cli : aws s3 mb s3://aminatoucoder-vpro-arts
-  - copie artificat in s3 :  aws s3 cp target/vprofile-v2.war s3://aminatoucoder-vpro-arts
+  - copy artifact in s3 :  aws s3 cp target/vprofile-v2.war s3://aminatoucoder-vpro-arts
 - copy artifact from s3 to tomcat ec2 instance
   - create iam role for ec2 instance to Allows EC2 instances to use S3 service (full access) : aminacoder-vprofile-role
   - attach aminacoder-vprofile-role to app01 via actions -> security
@@ -106,7 +106,7 @@ Multi tier web app stack : Vprofile project using vagrant
   - aws s3 cp s3://aminatoucoder-vpro-arts/vprofile-v2.war /tmp
   - systemctl stop tomcat9
   - rm -rf /var/lib/tomcat9/webapps/ROOT/
-  -  cp /tmp/vprofile-v2.war /var/lib/tomcat9/webapps/ROOT.war
+  - cp /tmp/vprofile-v2.war /var/lib/tomcat9/webapps/ROOT.war
   - systemctl start tomcat9 (ROOT will be extracted)
 - setup elb with https
   - create target group : name vprofile-app-TG, http : 8080, health check path : /login, override port : 8080, healthy threshold :2 , select instance : app01, click on pending below
