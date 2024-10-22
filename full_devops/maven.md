@@ -1,5 +1,6 @@
 # maven
 ## lifecycle
+    source code - compile - test unit (integration test) - packaging - health check
 
 ## lunch ubuntu ec2 and install infra
 - ssh into ec2
