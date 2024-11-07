@@ -171,9 +171,11 @@ objective : flexible infra, no upfront cost, Iaac, paas
   - -> select the "legacy cache setting" -> header = All -> query string = All -> cookies = all
   - WAF = do not enable (not free)
   - alternate domain name= vprofile.barryit.xyz -> select certificate -> security policy = tlSv1
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/CDNCloudFront.png)
 - update entry in goDaddy dsn zone
   - CNAME name = vprofile and value =dc5fzhfuyvwc9.cloudfront.net
 - test the url :  https://vprofile.barryit.xyz
-***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/CDNCloudFront.png)
+- ***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/resultDeplowithSSL.png)
 - clean up
