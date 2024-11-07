@@ -1,19 +1,12 @@
-[//]: # (```diff)
-
-[//]: # (- text in red)
-
-[//]: # (+ text in green)
-
-[//]: # (! text in orange)
-
-[//]: # (# text in gray)
-
-[//]: # (@@ text in purple &#40;and bold&#41;@@)
-
-[//]: # (```)
 ```diff
-# @@ AWS LIFT and SHIFT APP @@
+- text in red
++ text in green
+! text in orange
+# text in gray
+@@ text in purple (and bold)@@
 ```
+
+# $${\color{red} AWS LIFT and SHIFT APP
 ***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/webpagelogin_with_domain_name.png)
 ## previous 
