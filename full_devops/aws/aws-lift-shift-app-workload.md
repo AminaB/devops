@@ -53,6 +53,7 @@ Multi tier web app stack : Vprofile project using vagrant
     - 5672 from EC2s: for Rabbit MQ
     - all traffic : for the SG itself (internal traffic on all port)
     - 22 from my ip
+***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/SGs.png)
 ### Launch instances with user data (bash scripts)
 - create Key Pairs to log into EC2 instances using ssh
