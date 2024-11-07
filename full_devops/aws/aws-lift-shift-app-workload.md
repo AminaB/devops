@@ -122,11 +122,11 @@ Multi tier web app stack : Vprofile project using vagrant
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/domain.png)
 ### verify
 - got to  https://vprofileapp.barryit.xyz/index
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/webpagelogin_with_domain_name.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/webpagelogin_with_domain_name.png)
 ### build autoscaling group for tomcat instances.
 - create AMI from app01 : vprofile-app-image
 - create launch template from AMI : vprofile-app-LC, create tag : name =Vprofile-app, resource types : {volumes, instances}. in advanced section choose the iam role (aminacoder-vprofile-role)
-  ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/LT.png)
+  ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/LT.png)
 - create ASG : vprofile-app-ASG, select all zones, add TG, tags,...
 - terminate app01
 - enable stickiness in TG
