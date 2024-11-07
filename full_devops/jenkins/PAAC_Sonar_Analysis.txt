@@ -1,47 +1,52 @@
 pipeline {
-    agent any
-    tools {
-	    maven "MAVEN3"
-	    jdk "OracleJDK8"
+	agent any
+	tools {
+	    maven "MAVEN3.9"
+	    jdk "JDK17"
 	}
-    stages{
-        stage('Fetch code') {
-          steps{
-              git branch: 'vp-rem', url:'https://github.com/devopshydclub/vprofile-repo.git'
-          }  
-        }
 
-        stage('Build') {
+	stages {
+
+	    stage('Fetch code') {
             steps {
-                sh 'mvn clean install -DskipTests'
+               git branch: 'atom', url: 'https://github.com/hkhcoder/vprofile-project.git'
             }
-            post {
-                success {
-                    echo "Now Archiving."
-                    archiveArtifacts artifacts: '**/*.war'
-                }
-            }
-        }
-        stage('Test'){
-            steps {
+
+	    }
+
+
+	    stage('Build'){
+	        steps{
+	           sh 'mvn install -DskipTests'
+	        }
+
+	        post {
+	           success {
+	              echo 'Now Archiving it...'
+	              archiveArtifacts artifacts: '**/target/*.war'
+	           }
+	        }
+	    }
+
+	    stage('UNIT TEST') {
+            steps{
                 sh 'mvn test'
             }
-
         }
 
-        stage('Checkstyle Analysis'){
-            steps {
+        stage('Checkstyle Analysis') {
+            steps{
                 sh 'mvn checkstyle:checkstyle'
             }
         }
 
-        stage('Sonar Analysis') {
-            environment {
-                scannerHome = tool 'sonar4.7'
+        stage("Sonar Code Analysis") {
+        	environment {
+                scannerHome = tool 'sonar6.2'
             }
             steps {
-               withSonarQubeEnv('sonar') {
-                   sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+              withSonarQubeEnv('sonarserver') {
+                sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
                    -Dsonar.projectName=vprofile \
                    -Dsonar.projectVersion=1.0 \
                    -Dsonar.sources=src/ \
@@ -53,5 +58,6 @@ pipeline {
             }
         }
 
-    }
+	}
+
 }

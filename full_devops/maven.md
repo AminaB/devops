@@ -11,7 +11,7 @@
   - sudo apt install maven
   - mvn -v
 - if we want different version of maven 
-  - go to see in mvn archive 
+  - go see in mvn archive 
   - wget link
   - tar xzvf apache-maven.gz
   - sudo mv apache-maven-3.9.3 /opt/
