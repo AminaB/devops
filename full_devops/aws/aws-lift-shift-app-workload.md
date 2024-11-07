@@ -80,38 +80,38 @@ Multi tier web app stack : Vprofile project using vagrant
   -  ls /var/lib/tomcat9/
 
 ### ip to name mapping in Route 53 (in vagrant we used to use /etc/hosts file to map name to a VM ip, it is local) 
-  - go to route 53 in aws console
-  - create "hosted zone"
-  - name : vprofile.in
-  - choose private hosted zone(not visible in the internet only in the region vpc)
-  - region : us-east-1, and choose the vpc (we have only one in the region, all VM in the region will see the hosts)
-  - click on create hosted zone
-  - create record -> simple record for db01,mc01, and rmq01 (use the private ips for records)
+- go to route 53 in aws console
+- create "hosted zone"
+- name : vprofile.in
+- choose private hosted zone(not visible in the internet only in the region vpc)
+- region : us-east-1, and choose the vpc (we have only one in the region, all VM in the region will see the hosts)
+- click on create hosted zone
+- create record -> simple record for db01,mc01, and rmq01 (use the private ips for records)
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/route53HostedZone.png)
 
 ### build app from source code (create artifact)
-  - cd vprofile-project
-  - mvn install
+- cd vprofile-project
+- mvn install
 ### push artifact to s3 bucket
-  - create iam user (s3admin with s3 full access policy)
-  - create access keys for s3admin user with CLI access
-  - configure aws cli with the access keys : aws configure
-  - create s3 with cli : aws s3 mb s3://aminatoucoder-vpro-arts
-  - copy artifact in s3 :  aws s3 cp target/vprofile-v2.war s3://aminatoucoder-vpro-arts
+- create iam user (s3admin with s3 full access policy)
+- create access keys for s3admin user with CLI access
+- configure aws cli with the access keys : aws configure
+- create s3 with cli : aws s3 mb s3://aminatoucoder-vpro-arts
+- copy artifact in s3 :  aws s3 cp target/vprofile-v2.war s3://aminatoucoder-vpro-arts
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/s3.png)
 ### copy artifact from s3 to tomcat ec2 instance
-  - create iam role for ec2 instance to Allows EC2 instances to use S3 service (full access) : aminacoder-vprofile-role
-  - attach aminacoder-vprofile-role to app01 via actions -> security
-  - ssh to app01
-  - sudo -i
-  - apt update
-  - apt install awscli -y
-  - test : aws s3 ls
-  - aws s3 cp s3://aminatoucoder-vpro-arts/vprofile-v2.war /tmp
-  - systemctl stop tomcat9
-  - rm -rf /var/lib/tomcat9/webapps/ROOT/
-  - cp /tmp/vprofile-v2.war /var/lib/tomcat9/webapps/ROOT.war
-  - systemctl start tomcat9 (ROOT will be extracted)
+- create iam role for ec2 instance to Allows EC2 instances to use S3 service (full access) : aminacoder-vprofile-role
+- attach aminacoder-vprofile-role to app01 via actions -> security
+- ssh to app01
+- sudo -i
+- apt update
+- apt install awscli -y
+- test : aws s3 ls
+- aws s3 cp s3://aminatoucoder-vpro-arts/vprofile-v2.war /tmp
+- systemctl stop tomcat9
+- rm -rf /var/lib/tomcat9/webapps/ROOT/
+- cp /tmp/vprofile-v2.war /var/lib/tomcat9/webapps/ROOT.war
+- systemctl start tomcat9 (ROOT will be extracted)
 ### setup elb with https
 - create target group : name vprofile-app-TG, http : 8080, health check path : /login, override port : 8080, healthy threshold :2 , select instance : app01, click on pending below
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/TG.png)
