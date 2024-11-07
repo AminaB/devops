@@ -1,4 +1,12 @@
-# AWS LIFT and SHIFT APP
+```diff
+- text in red
++ text in green
+! text in orange
+# text in gray
+@@ text in purple (and bold)@@
+```
+
+# @@ AWS LIFT and SHIFT APP @@
 ***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/webpagelogin_with_domain_name.png)
 ## previous 
@@ -140,3 +148,5 @@ Multi tier web app stack : Vprofile project using vagrant
 - terminate app01
 - enable stickiness in TG
 - test
+
+### clean up
