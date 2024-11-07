@@ -14,10 +14,10 @@ objective : flexible infra, no upfront cost, Iaac, paas
 ## Workflow
 - login to aws account
 - create key pair for beanstalk instance login
-- create SG for back end 
+### create SG for back end 
   - name : vprofile-backend-SG
   - add inbound rules : from vprofile-backend-SG itself
-- create RDS
+### create RDS
   - create subnet group : vprofile-rds-sub-group, select all az, select all subnets, create.
   - create parameter groups : vprofile-rds-para-group, mysql8
   - create database : 
@@ -43,7 +43,7 @@ objective : flexible infra, no upfront cost, Iaac, paas
     - log exports : check all
     - click create
     - view credentials details : and save user and pwd
-- create Amazon Elastic cache
+### create Amazon Elastic cache
   - create subnet group : vprofile-memcached-sub-group, create.
   - create parameter groups : vprofile-memcached-para-group, memcached1.6
   - create memcached cluster : 
@@ -58,7 +58,7 @@ objective : flexible infra, no upfront cost, Iaac, paas
     - ...
     - SG : select vprofile-backend-SG
     - create
-- create Amazon Active MQ
+### create Amazon Active MQ
   - go to amazon mq
   - RabbitMq
   - single...
@@ -70,7 +70,7 @@ objective : flexible infra, no upfront cost, Iaac, paas
   - select SG
   - next -> create
 
-- init DB
+### init DB
   - lucnh ubuntu ec2
     - name : mysql-client
     - use key pair
@@ -92,7 +92,7 @@ objective : flexible infra, no upfront cost, Iaac, paas
 - copy endpoints of Active MQ and memcached
 
 
-- create elastic beanstalk environment
+### create elastic beanstalk environment
   - platform service
   - create iam role
     - Ec2
@@ -121,23 +121,49 @@ objective : flexible infra, no upfront cost, Iaac, paas
       - Rolling (read deployment policy : https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.rolling-version-deploy.html)
       - percentage 50
       - create
+  - test 
+[alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/verifBeanStalkConfig.png)
   - open vprofile-app-prod
     - configuration -> edit "Instance traffic and scaling" -> go to "process" section -> action -> edit -> health check -> path : /login
     - sessions -> enabled check
     - add https in listener with port 443 (configuration -> edit "Instance traffic and scaling" -> go to "listener"). and choose the certificate 
     - health check will be (severe) because we don't have /login yet (we need to add the project)
-- update SG of backend to allow traffic from elastic beanstalk EC2s SG
+### update SG of backend to allow traffic from elastic beanstalk EC2s SG
   - copy the SG id from ec2 created by beanstalk, to backend SG (allow all traffic from instance SG) or we can also allow traffic from EC2 only on 3 ports (mysql, elastic cache, rabbitMQ)
 
-- build artifact with backend info
+### build artifact with backend info
   - clone the project 
   - add endpoints (mysql, rabbitmq and memcached), username and pwd in application.properties
   - build : mvn install
 - deploy artifact to beanstalk
   - go to aws console -> elastic beans stalk -> upload manually the war file in the beanstalk app
   - go to godaddy add record cname with name =vprofile ,value = vprofileapp96.us-east-1.elasticbeanstalk.com(beanstalk endpoint)
+  ***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/domain.png)
   - test https://vprofile.barryit.xyz
-- create CDN with ssl cert
+### Stack created by beanstalk
+- S3
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/S3.png)
+- EC2s
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/EC2s.png)
+
+- Load balancer
+  ***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/LB.png)
+
+- Target Group
+  ***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/TG.png)
+
+- Auto Scaling group
+  ***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/ASG.png)
+- Elastic Block Store
+  ***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/EBS.png)
+### create CDN with ssl cert
   - cloud front
   - cache website content into edge location
   - remove cname record to LB on godaddy
@@ -148,4 +174,6 @@ objective : flexible infra, no upfront cost, Iaac, paas
 - update entry in goDaddy dsn zone
   - CNAME name = vprofile and value =dc5fzhfuyvwc9.cloudfront.net
 - test the url :  https://vprofile.barryit.xyz
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/CDNCloudFront.png)
 - clean up
