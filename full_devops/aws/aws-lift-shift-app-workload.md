@@ -121,7 +121,7 @@ Multi tier web app stack : Vprofile project using vagrant
   - copy dsn name from elb and add record in godaddy -> DNS -> add record (with value : vprofile-prod-elb-1448622209.us-east-1.elb.amazonaws.com)
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/domain.png)
 ### verify
-- https://vprofileapp.barryit.xyz/index
+- got to  https://vprofileapp.barryit.xyz/index
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/webpagelogin_with_domain_name.png)
 ### build autoscaling group for tomcat instances.
 - create AMI from app01 : vprofile-app-image
