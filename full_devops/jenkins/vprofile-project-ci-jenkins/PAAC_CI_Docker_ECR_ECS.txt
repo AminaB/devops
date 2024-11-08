@@ -1,0 +1,119 @@
+pipeline {
+    agent any
+    tools {
+        maven "MAVEN3.9"
+        jdk "JDK17"
+    }
+
+
+    environment {
+        cluster = "vprofile"
+        service = "vprofileappsvc"
+
+         AWS_REGION = 'us-east-1'
+         ECR_REPO = 'vprofileappimg'
+         IMAGE_TAG = 'latest'
+         AWS_ACCOUNT_ID = '713881797310'
+    }
+  stages {
+
+        stage('Fetch code') {
+            steps {
+               git branch: 'docker', url: 'https://github.com/hkhcoder/vprofile-project.git'
+            }
+
+        }
+
+
+        stage('Build'){
+            steps{
+               sh 'mvn install -DskipTests'
+            }
+
+            post {
+               success {
+                  echo 'Now Archiving it...'
+                  archiveArtifacts artifacts: '**/target/*.war'
+               }
+            }
+        }
+
+        stage('UNIT TEST') {
+            steps{
+                sh 'mvn test'
+            }
+        }
+
+        stage('Checkstyle Analysis') {
+            steps{
+                sh 'mvn checkstyle:checkstyle'
+            }
+        }
+
+        stage("Sonar Code Analysis") {
+            environment {
+                scannerHome = tool 'sonar6.2'
+            }
+            steps {
+              withSonarQubeEnv('sonarserver') {
+                sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+                   -Dsonar.projectName=vprofile \
+                   -Dsonar.projectVersion=1.0 \
+                   -Dsonar.sources=src/ \
+                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                   -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                   -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+              }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+          }
+
+       stage('Login to AWS ECR') {
+                   steps {
+                       script {
+                           withAWS(credentials: 'awscreds', region: AWS_REGION) {
+                               sh 'aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com'
+                           }
+                       }
+                   }
+               }
+               stage('Build App Image') {
+                 steps {
+
+                   script {
+                           sh 'docker build -t $ECR_REPO:$IMAGE_TAG -f ./Docker-files/app/multistage/Dockerfile .'
+                       }
+                 }
+
+               }
+
+               stage('Upload App Image') {
+                 steps{
+                   script {
+
+
+                            sh 'docker tag $ECR_REPO:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG'
+                            sh 'docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG'
+                   }
+                 }
+               }
+
+
+            stage('Deploy to ecs') {
+              steps {
+                withAWS(credentials: 'awscreds', region: 'us-east-1') {
+                    sh 'aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment'
+                }
+              }
+            }
+
+  }
+}

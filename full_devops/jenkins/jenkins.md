@@ -40,11 +40,11 @@ extensible : many plugins
 - add jdk : 21 & 17
   - name : JDK21
   - JAVA_HOME :  /usr/lib/jvm/java-21-openjdk-amd64/
-  - name : OracleJDK8
-  - JAVA_HOME :  /usr/lib/jvm/java-8-openjdk-amd64/
+  - name : JDK17
+  - JAVA_HOME :  /usr/lib/jvm/java-17-openjdk-amd64/
 - add maven
-  - name MAVEN3
-  - install automatically : version 3.9.3
+  - name MAVEN3.9
+  - install automatically : version 3.9.9
 - no need for git on ubuntu
 
 # create job
@@ -142,6 +142,7 @@ allow http for jenkins-sg in sonar-sg
 - go to configure system - SonarQube server - check env variable - 
 - url = http://publicIp (remember to update when stop instance or use private ip)
 - name : sonarserver
+
 - token : got to sonar cube server, myacount - security - generate token (name=jenkins, type= user token) - copy token 
   - in jenkins choose secret text - past token
   - id : mysonarToken
@@ -271,14 +272,14 @@ in jenkins-sg allow connexion from sonar-sg on 8080
 
 # Build docker img and add to AMAZON ECR instead of nexus
 - install docker engine in jenkins
-  - ssh in jenkins ec2
+  - ssh into jenkins ec2
   - sudo -i
-  - sudo apt update, sudo apt install awscli -y
+  - sudo apt update, sudo snap install aws-cli --classic
   - install docker engine : https://docs.docker.com/engine/install/ubuntu/#installation-methods
   - systemctl status docker
-  - give right to jenkins user , add to docker group : usermod -a -G docker jenkins
+  - give right to jenkins user , add jenkins user to docker group : usermod -a -G docker jenkins
   - checks : id jenkins 
-  - reboot
+  - reboot 
 
 - Iam user with ecr permission
   - user name : jenkins 
@@ -292,18 +293,22 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - Repositories -> create
   - name : vprofileappimg
   - create
+  
 - plugin docker pipeline
   - manage jenkins -> plugin -> searc 
-  - "docker pipeline" plugin
   - install "Amazon ECR" plugin
-  - install "Aws sdk" plugin
+  - install "Aws sdk::all" plugin
+  - install "docker pipeline"
   - install "CloudBees Docker Build and publish" plugin
 - store aws cred in jenkins
-  - manage jenkins -> manage credentials -> global -> add credentials -> 
+  - manage jenkins -> manage credentials -> global -> add credentials ->  select "AWS credentials"
   - id : awscreds
   - access key : ***
   - secret key :  **
 - build pipeline: PAAC_CI_Docker_ECR.txt
+- verfy space in jenkins server : df -h ,fdisk -l
+- fix space issue by adding more GB in jenkins ec2 volume : modify volume to add GB, not instance type
+- reboot server and run job
 
 # ci cd : deploy our container image
 - setups ecs cluster on aws
@@ -318,10 +323,10 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - name : vprofileapptask
   - memory : 2gb
   - container -1 : name : vproapp, image uri : copy uri from ecr
-  - port :8080
+  - port :8080 (tomcat)
   - add tags 
   - create
--add cloudWatchLogsFullAcces permission to task definition role
+- add cloudWatchLogsFullAcces permission to task definition role
 
 - add service to cluster
   - got to cluster -> service -> create
@@ -333,18 +338,18 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - LB : app lb, name : vproappelbecs
   - TG : name : vproappecstg, health check path: /login 
   - create
-- test : copy (cprofileappsvc ->networking -> dns name) to browser (without backend service yet)
+- test : copy (cprofileappsvc ->configuration and networking -> dns name) to browser (without backend service yet)
 
 
 - install plugins 
   - manage jenkins -> manage pluggins - > install "pipeline:aws steps"
-- create job with with PAAC_CICD_Docker_ECR_ECS+(1).txt script
+- create job with with PAAC_CICD_Docker_ECR_ECS.txt script
   the script will create a new container and fetch the latest image and run it and delete the old container
 
 # job triggers 
 - git web hook : whenever there is a commit
   - configured on GitHub
-- poll SCM : check for commit (intervall : every 5 minutes for exemple)
+- poll SCM : check for commit (intervall : every 5 minutes for example)
   - configured in jenkins
 - scheduled jobs : precise time
   - configured in jenkins
@@ -359,4 +364,3 @@ in jenkins-sg allow connexion from sonar-sg on 8080
 - load distribution
 - cross-platform 
 - software testing
-- 
