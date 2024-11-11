@@ -82,6 +82,8 @@ Multi tier web app stack : Vprofile project using vagrant
   - ssh -i vprofile-prodd-key.pem ubuntu@54.90.182.183
   - systemctl status tomcat9
   -  ls /var/lib/tomcat9/
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/ec2s.png)
 
 ### ip to name mapping in Route 53 (in vagrant we used to use /etc/hosts file to map name to a VM ip, it is local) 
 - go to route 53 in aws console
