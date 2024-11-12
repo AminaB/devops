@@ -45,6 +45,9 @@ Multi tier web app stack : Vprofile project using vagrant
 ## workflow (us-east-1)
 - login to aws account (use iam user with admin access not root)
 - create Certificate in ACM for my godaddy domain : barryit.xyz
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/certificateACM.png)
+
 ### create SGs (for LB, EC2s, and backend services: mysql, memcached, rabbit mq)
 - LB SG  : allow http traffic and https from everywhere
 - EC2 SG (tomcat) : allow http traffic from LB SG
