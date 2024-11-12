@@ -1,5 +1,6 @@
 # Refactoring with aws paas and CloudFront
-
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/resultDeplowithSSL.png)
 ## prerequisite
 - aws-lift-shift-app-workload.md : lift and shift
 
@@ -124,7 +125,6 @@ objective : flexible infra, no upfront cost, Iaac, paas
   - test 
 ***
 [alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/verifBeanStalkConfig.png)
-
   - open vprofile-app-prod
     - configuration -> edit "Instance traffic and scaling" -> go to "process" section -> action -> edit -> health check -> path : /login
     - sessions -> enabled check
@@ -178,6 +178,6 @@ objective : flexible infra, no upfront cost, Iaac, paas
 - update entry in goDaddy dsn zone
   - CNAME name = vprofile and value =dc5fzhfuyvwc9.cloudfront.net
 - test the url :  https://vprofile.barryit.xyz
-- ***
+***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/resultDeplowithSSL.png)
 - clean up
