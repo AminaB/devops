@@ -252,7 +252,7 @@ in jenkins-sg allow connexion from sonar-sg on 8080
 
 - stages 
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/stagess-pipeline.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/stages-pipeline.png)
 
 ## Build docker img and add to AMAZON ECR instead of nexus
 - install docker engine in jenkins
@@ -324,7 +324,7 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - create
 - add cloudWatchLogsFullAcces permission to task definition role
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-task.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/clusters-task.png)
 
 - add service to cluster
   - got to cluster -> service -> create
@@ -337,7 +337,7 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - TG : name : vproappecstg, health check path: /login 
   - create
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-service.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/clusters-service.png)
 
 - test : copy (cprofileappsvc ->configuration and networking -> dns name) to browser
 ***
