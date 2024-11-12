@@ -122,7 +122,6 @@ objective : flexible infra, no upfront cost, Iaac, paas
       - Rolling (read deployment policy : https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.rolling-version-deploy.html)
       - percentage 50
       - create
-  - test 
 ***
 [alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/verifBeanStalkConfig.png)
   - open vprofile-app-prod
