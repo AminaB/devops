@@ -124,6 +124,7 @@ objective : flexible infra, no upfront cost, Iaac, paas
   - test 
 ***
 [alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/verifBeanStalkConfig.png)
+
   - open vprofile-app-prod
     - configuration -> edit "Instance traffic and scaling" -> go to "process" section -> action -> edit -> health check -> path : /login
     - sessions -> enabled check
