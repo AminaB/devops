@@ -263,7 +263,7 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - systemctl status docker
   - give right to jenkins user , add jenkins user to docker group : usermod -a -G docker jenkins
   - checks : id jenkins 
-  - reboot 
+  - reboot
 
 - Iam user with ecr permission
   - user name : jenkins 
@@ -277,7 +277,9 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - Repositories -> create
   - name : vprofileappimg
   - create
-  
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/aws-ecr.png)
+
 - plugin docker pipeline
   - manage jenkins -> plugin -> searc 
   - install "Amazon ECR" plugin
@@ -289,10 +291,18 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - id : awscreds
   - access key : ***
   - secret key :  **
-- build pipeline: PAAC_CI_Docker_ECR.txt
-- verfy space in jenkins server : df -h ,fdisk -l
+- build job with : PAAC_CI_Docker_ECR.txt
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/ci-pipeline-sonar-nexus-ECR.png)
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/ci-pipeline-sonar-nexus-ECR-detail.png)
+
+- if build failed : verify space in jenkins server : df -h ,fdisk -l
 - fix space issue by adding more GB in jenkins ec2 volume : modify volume to add GB, not instance type
 - reboot server and run job
+- verify image in ECR repo
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/ecr-image-create-by-ci-pipeline.png)
 
 ## ci cd : deploy our container image
 - setups ecs cluster on aws
@@ -302,7 +312,9 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - Monitoring -> active use container in sights
   - add tags
   - create
-  
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster.png)
+
 - create task definition : config
   - name : vprofileapptask
   - memory : 2gb
@@ -311,6 +323,8 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - add tags 
   - create
 - add cloudWatchLogsFullAcces permission to task definition role
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-task.png)
 
 - add service to cluster
   - got to cluster -> service -> create
@@ -322,13 +336,29 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - LB : app lb, name : vproappelbecs
   - TG : name : vproappecstg, health check path: /login 
   - create
-- test : copy (cprofileappsvc ->configuration and networking -> dns name) to browser (without backend service yet)
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-service.png)
 
+- test : copy (cprofileappsvc ->configuration and networking -> dns name) to browser
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-service-dsn-test-on-browser.png)
 
 - install plugins 
   - manage jenkins -> manage pluggins - > install "pipeline:aws steps"
 - create job with with PAAC_CICD_Docker_ECR_ECS.txt script
   the script will create a new container and fetch the latest image and run it and delete the old container
+
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/deploy-ecs-stages.png)
+
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/ecs-old-and-new-containers.png)
+
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/ecs-service-deployment.png)
+
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/ecs-service-deployment2.png)
 
 # job triggers 
 - git web hook : whenever there is a commit
