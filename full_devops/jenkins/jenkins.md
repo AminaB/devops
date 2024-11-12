@@ -1,4 +1,8 @@
 #  Jenkins CI CD
+
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-service-dsn-test-on-browser2.png)
+
 extensible : many plugins
 ## CI : build code from VCS after every commit
 - fetch code - build - test - notify developer
@@ -250,7 +254,7 @@ in jenkins-sg allow connexion from sonar-sg on 8080
 ***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/stagess-pipeline.png)
 
-# Build docker img and add to AMAZON ECR instead of nexus
+## Build docker img and add to AMAZON ECR instead of nexus
 - install docker engine in jenkins
   - ssh into jenkins ec2
   - sudo -i
@@ -290,7 +294,7 @@ in jenkins-sg allow connexion from sonar-sg on 8080
 - fix space issue by adding more GB in jenkins ec2 volume : modify volume to add GB, not instance type
 - reboot server and run job
 
-# ci cd : deploy our container image
+## ci cd : deploy our container image
 - setups ecs cluster on aws
   - clusters 
   - create cluster -> name : vprofile 
