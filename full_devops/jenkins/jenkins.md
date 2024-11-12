@@ -147,7 +147,6 @@ allow http for jenkins-sg in sonar-sg
 
 ## sonar demo
 - scan code with sonar and apply result in sonar server through pipeline as code
-- add to pipeline as code (create another job) :
 - update jenkins ec2 SG : 8080 allow from Sonar SG
 - create job with PAAC_Sonar_Analysis.txt script
 - there is a link in jenkins pipeline to sonar server (check the analysis result)
