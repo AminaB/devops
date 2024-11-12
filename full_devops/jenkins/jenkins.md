@@ -1,4 +1,4 @@
-# intro jenkins
+#  Jenkins CI CD
 extensible : many plugins
 ## CI : build code from VCS after every commit
 - fetch code - build - test - notify developer
@@ -83,7 +83,7 @@ on single  VM we have :
 - sonarqube
 - nginx
 - PostgreSQL instead of mysql
-create key pair form each vm
+create key pair for each vm
 ## VMs
 nexus 
 - nexus -server centos(centos stream9)
@@ -144,8 +144,15 @@ allow http for jenkins-sg in sonar-sg
 ## sonar demo
 - scan code with sonar and apply result in sonar server through pipeline as code
 - add to pipeline as code (create another job) :
+- update jenkins ec2 SG : 8080 allow from Sonar SG
 - create job with PAAC_Sonar_Analysis.txt script
 - there is a link in jenkins pipeline to sonar server (check the analysis result)
+- send info to jenkins using webhooks
+  - project -settings -> webhooks -> create
+  - name : jenkins-ci-webhook
+  - url : http://jenkinsprivateip:8080/sonarqube-webhook
+***
+- ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/sonar-webhook.png)
 ***
 - ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/jenkins-sonarpipeline-sucess.png)
 
@@ -166,14 +173,8 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - greater than 10
 - select the created quality gate
   - vprofile project setting -> select "vprofile-QG" -> save
-- send info to jenkins using webhooks
-  - project -settings -> webhooks -> create
-  - name : jenkins-ci-webhook
-  - url : http://jenkinsprivateip:8080/sonarqube-webhook 
-***
-- ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/sonar-webhook.png)
 
-- update jenkins ec2 SG : 8080 allow from Sonar SG
+
 - create job with PAAC_Sonar_QualityGates.txt script
 - result failed (10 is smaller)
 ***
