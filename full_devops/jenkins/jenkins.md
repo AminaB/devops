@@ -1,9 +1,9 @@
 #  Jenkins CI CD
 
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-service-dsn-test-on-browser2.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-service-dsn-test-on-browser.png)
 
-extensible : many plugins
+jen is extensible : many plugins
 ## CI : build code from VCS after every commit
 - fetch code - build - test - notify developer
 
