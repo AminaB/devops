@@ -182,7 +182,7 @@ in jenkins-sg allow connexion from sonar-sg on 8080
 - create job with PAAC_Sonar_QualityGates.txt script
 - result failed (10 is smaller)
 ***
-- ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/jenkins-qualityGate-fail10%.png)
+- ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/jenkins-qualityGate-fail10.png)
 
 ## upload artifact to nexus
 - nexus : is a software repository, runs on java
