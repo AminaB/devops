@@ -72,7 +72,7 @@ objective : flexible infra, no upfront cost, Iaac, paas
   - next -> create
 
 ### init DB
-  - lucnh ubuntu ec2
+  - lunch ubuntu ec2
     - name : mysql-client
     - use key pair
     - create SG : mysql-client-sg
