@@ -98,13 +98,17 @@ sonarqube
 - t2 medium
 - SG : 22 from my ip, 80 from my ip and jenkinsSG
 - copy sonar-setup.sh in user data
-
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/ec2s.png)
 ## test VMS
 - ssh ...
 - systemctl ...
 - for nexus : ip:8081 (see welcome page), signin (create new pwd : nexuspwd)
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/nexus1.png)
 - for sonar : ip:80, login =pwd=admin (updatepwd = sonarpwd)
-
+***
+- ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/sonar1.png)
 ## isntall pluggins on jenkins EC2
 - manage jenkins - add plugging 
 - nexus artifact
@@ -115,26 +119,15 @@ sonarqube
 - install without restart
 
 ## pipeline as code
-jenkinsfile defines stages in CICD pipeline
-`Pipeline{
-  stages{
-    // clone from vcs
-    steps{}
-    post{} // post-build
-  }
-  stages{
-  // maven build
-  }
-}`
-
-# code analysis ( checkstyle, cobertura, mstest, Sonarqube Scanner, etc ..)
+- jenkinsfile defines stages in CICD pipeline
+## code analysis ( checkstyle, cobertura, mstest, Sonarqube Scanner, etc ..)
 - best practices
 - vulnerability
 - functional errors
 
 ## add sonar to jenkins
 allow http for jenkins-sg in sonar-sg
-- tools -  add sonarqube scanner 
+- in jenkins tools -  add sonarqube scanner 
 - name : sonar6.2
 - version : 6.2***
 - install automatically
@@ -149,17 +142,18 @@ allow http for jenkins-sg in sonar-sg
   - add
 
 ## sonar demo
-- add in jenkinsfile and create another job:
-  // stage for sonarqube
-  `stage('Checkstyle Analysis'){
-  steps{
-  sh 'mvn checkstyle:checkstyle'
-  }
-  }`
 - scan code with sonar and apply result in sonar server through pipeline as code
-- add to pipeline as code (create another job) : 
-
+- add to pipeline as code (create another job) :
+- create job with PAAC_Sonar_Analysis.txt script
 - there is a link in jenkins pipeline to sonar server (check the analysis result)
+***
+- ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/jenkins-sonarpipeline-sucess.png)
+
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/sonar2-resultvprofilesan.png)
+
+***
+- ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/sonar2-detail.png)
 
 ## sonar quality gate
 in jenkins-sg allow connexion from sonar-sg on 8080
@@ -176,27 +170,27 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - project -settings -> webhooks -> create
   - name : jenkins-ci-webhook
   - url : http://jenkinsprivateip:8080/sonarqube-webhook 
-- got jenkins ec2 SG : 8080 allow from Sonar SG
-- add to jenkins :
-  `stage("Quality Gate") {
-  steps {
-  timeout(time: 1, unit: 'HOURS') {
-  // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-  // true = set pipeline to UNSTABLE, false = don't
-  waitForQualityGate abortPipeline: true
-  }
-  }
-  }`
+***
+- ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/sonar-webhook.png)
+
+- update jenkins ec2 SG : 8080 allow from Sonar SG
+- create job with PAAC_Sonar_QualityGates.txt script
 - result failed (10 is smaller)
+***
+- ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/jenkins-qualityGate-fail10%.png)
+
 ## upload artifact to nexus
 - nexus : is a software repository, runs on java
 - support variety of repo : maven, apt, docker, ruby gems etc...
-- jenkins with nexus 
-  - code commit -> github ->fetch build on jenkins  -> upload to nexus repository
+- jenkins pipeline with nexus 
+  - github ->fetch build on jenkins  -> upload to nexus repository
 - connect to : nexus-serverIP:8081
 - setting -> repositories -> create maven2(hosted)
   - name : vprofile-repo
   - create
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/nexus-repo.png)
+
 - go to jenkins ans setups nexus credential
   - manage jenkins -> manage credentials -> System -> Global credentials  -> add credentials
   - username : admin
@@ -206,29 +200,15 @@ in jenkins-sg allow connexion from sonar-sg on 8080
   - manage jenkins -> configure system -> enable build timestamp 
   - pattern : yy-MM-dd_HH-mm
   - save
-- write pipeline code
-  ` stage("UploadArtifact"){
-  steps{
-  nexusArtifactUploader(
-  nexusVersion: 'nexus3',
-  protocol: 'http',
-  nexusUrl: 'nexusPrivateip:8081',
-  groupId: 'QA',
-  version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
-  repository: 'vprofile-repo',
-  credentialsId: 'nexuslogin',
-  artifacts: [
-  [artifactId: 'vproapp',
-  classifier: '',
-  file: 'target/vprofile-v2.war',
-  type: 'war']
-  ]
-  )
-  }
-  }`
+- write pipeline code with PAAC_CI_Sonar_Nexus.txt script
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/jenkins-sonar-nexus-pipeline.png)
+
 - if no more space : in jenkins server, cd /var/lib/jenkins/workspace and  rm -rf * 
   - and restart jenkins service
 - test pipeline and check the artifact in nexus
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/war-file-in-nexusRepo.png)
 
 # automate pipeline notification
 - create slack account https://slack.com/get-started#landing
@@ -251,24 +231,23 @@ in jenkins-sg allow connexion from sonar-sg on 8080
     - channel : #jenkinscicd
     - test connection
     - save
-  - add post build steps in pipeline
-  ` post {
-    always {
-    echo 'Slack Notifications.'
-    slackSend channel: '#jenkinscicd',
-    color: COLOR_MAP[currentBuild.currentResult],
-    message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
-    }
-    }
-  `
+  - add post build steps in pipeline with PAAC_CI_SlackNotification.txt
   - add color var:
   `def COLOR_MAP = [
     'SUCCESS': 'good',
     'FAILURE': 'danger',
     ]`
   - test success
-  - test fail
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/slack-notif-success-pipeline.png)
 
+  - test fail
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/slack-failure.png)
+
+- stages 
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/stagess-pipeline.png)
 
 # Build docker img and add to AMAZON ECR instead of nexus
 - install docker engine in jenkins

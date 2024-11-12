@@ -1,4 +1,4 @@
-# refactoring with aws paas and CloudFront
+# Refactoring with aws paas and CloudFront
 
 ## prerequisite
 - aws-lift-shift-app-workload.md : lift and shift
