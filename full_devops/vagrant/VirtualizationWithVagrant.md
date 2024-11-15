@@ -22,9 +22,9 @@
 
 # Website setup using vagrant provisioning
 ## vagrant plugin 
-- vagrant plugin  install vagrant-hostmanage : this plugin assure that every VM /etc/hosts file should have entry : name matching @ip
+- vagrant plugin  install vagrant-hostname : this plugin assure that every VM /etc/hosts file should have entry : name matching @ip
 ## centos : http server & html template
-     - vagrant init centos...., change the ip address and active public network and vb.memory in vigrant file
+     - vagrant init centos...., change the ip address and active public network and vb.memory in vagrant file
      - vagrant ssh, and change the hostname to "finance" : vi /etc/hostname, logout and login again
      - yum install httpd wget vim unzip zip -Y
      - systemctl start httpd
