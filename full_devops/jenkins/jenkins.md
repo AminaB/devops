@@ -1,4 +1,6 @@
 #  Jenkins CI CD
+In this setup, I'll Automate a project deployment (Vprofile projetc BY @hkhcoder ) using the following services:
+Git, Jenkins, SonarQube, Nexus, Slack Notification, AWS ECR, AWS ECS
 
 ***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-service-dsn-test-on-browser.png)

@@ -1,19 +1,22 @@
 
 
 #  AWS LIFT and SHIFT APP
+In this setup, I'll manually build and deploy a project (Vprofile projetc BY @hkhcoder ) using the following AWS services: 
+EC2 instances, Elastic Load Balancer (ELB), Auto Scaling Group (ASG), ACM, and S3.
 ***
+## The final result
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/webpagelogin_with_domain_name.png)
 ## previous 
-Multi tier web app stack : Vprofile project using vagrant
+Multi tier web app stack : Vprofile project running in VMs created by vagrant file
 ### Scenario
 - app services running on physical/VM machines
-- work load in data center (many services running in the same DC)
-- many team : DC OPS, Monitoring, Sys Admin, etc...
+- work load in same machine (many services running in the same DC, here my computer)
 
-### problem 
+### problem of managing DC
+- many teams (DC OPS, Monitoring, Sys Admin, etc...)
 - complex management services and teams 
-- Scale complexity
-- Cap EX and regular maintenance cost
+- scale complexity
+- cap EX and regular maintenance cost
 - difficult to automate
 - time-consuming
 
@@ -21,7 +24,7 @@ Multi tier web app stack : Vprofile project using vagrant
 
 ### objective
 - flexible infra
-- No upfront cost
+- no upfront cost
 - modernize app effectively
 - IAAC : automation
 - 
