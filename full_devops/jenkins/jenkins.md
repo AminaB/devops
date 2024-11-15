@@ -3,6 +3,7 @@ In this setup, I'll Automate a project deployment (Vprofile projetc BY @hkhcoder
 Git, Jenkins, SonarQube, Nexus, Slack Notification, AWS ECR, AWS ECS
 
 ***
+## The final result
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/jenkins/img/cluster-service-dsn-test-on-browser.png)
 
 jen is extensible : many plugins
