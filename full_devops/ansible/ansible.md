@@ -218,4 +218,17 @@ to call the variable : "{{dbname}}"
 USRNM: web02user
 COMM : variables from host_vars/web02 file
 
-- command line varibales (higher priority) : ansible-playbook -e USRNM=cliuser -e COMM=cliuser vars_precedence.yaml 
+- command line varibales (higher priority) : ansible-playbook -e USRNM=cliuser -e COMM=cliuser vars_precedence.yaml
+  https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html
+## Fact variables : runtime variables
+generated when setup module executed
+- we can disable these variables : 
+gather_fasts: FALSE
+- ansible -m setup web01 : to see fact variables for web01
+- print variable using playbook
+tasks
+  - name: print os name
+    debug:
+        var: ansible_distribution
+- run
+-   
