@@ -146,3 +146,32 @@ state: present`
       priv :'*.*:ALL
       state: present
       login_unix_socket: /var/lib/mysql/mysql.sock`
+
+## Ansible configuration
+ex : change the port of ssh connection
+- ANSIBLE_CONFIG (environment variable if set)
+- ansible.cfg (in the current directory)
+- ~/.ansible.cfg (in the home directory)
+- /ect/ansible/ansible.cfg (System level)
+### read /ect/ansible/ansible.cfg
+- ssh to ansible server
+- cd vprofile
+- sudo -i 
+- vim /ect/ansible/ansible.cfg
+
+### create our own ansible configuration
+- vim ansible.cfg
+`[default]
+host_key_checking =False
+inventory=inventory
+forks =5
+log_path =/var/log/ansible.log
+[privilege_escalation]
+become=true
+become_method=sudo
+become_ask_pass=False`
+- save
+- sudo touch /var/log/ansible.log
+- chown ubuntu. ubuntu /var/log/ansible.log
+- ansible-playbook db.yml (don't need to mention inventory, already in the config file)
+
