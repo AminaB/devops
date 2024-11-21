@@ -27,6 +27,7 @@ Running the tool multiple times won’t make changes if the system is already in
 - cd exercise1
 ## Inventory file and test with ping command
 the inventory file defines the hosts (servers or devices) that Ansible manages.
+
 ` # Inventory file: inventory.yaml
 all:
     hosts:
@@ -54,6 +55,7 @@ To avoid interaction with console like "fingrtprint when ssh", we need to create
 - test for web02 and db01
 
 - add group in inventory file 
+
 `children:
 webservers:
   hosts:
@@ -72,6 +74,7 @@ dc_oregon:
 - test : ansible '*' -m ping -i inventory
 
 - test with vars (delete those lines at host level)
+
 ` vars:
     ansible_ssh_user: ec2-user
     ansible_ssh_private_key_file: clientkey.pem`
@@ -114,12 +117,14 @@ tasks:
 - run : ansible-playbook -i inventory web-db.yaml (-v -vv -vvv -vvvv  for debugging information) (--syntax-check to check playbook syntax)
 - ansible modules : https://docs.ansible.com/ansible/2.9/modules/list_of_all_modules.html (ex: ansible.builtin.yum)
 - test copy file : https://docs.ansible.com/ansible/2.9/modules/copy_module.html#copy-module
+
 `- name: Copy file with owner and permissions
   copy:
   src: files/index.html
   dest: /var/www/html/index.html
   backup: yes`
 - tes db modules : https://docs.ansible.com/ansible/2.9/modules/mssql_db_module.html#mssql-db-module
+
 `# Create a new database with name 'accounts'
 name : create db
 mssql_db:
@@ -127,11 +132,13 @@ name: accounts
 state: present`
   - require python >= 2.7 or pymssql
     - check in db01 server the exact package name : yum search python | grep -i mysql 
-      `-name : Instal pymysql
+      
+    `-name : Instal pymysql
           ansible.builtin.yum
           name: python3-PyMySQL
           state: present`
     - resolve access denied for user root@localhost : ansible can't connect to mysql server
+    
     `name : create db
       community.mysql.mssql_db:
       name: accounts
@@ -139,6 +146,7 @@ state: present`
       login_unix_socket: /var/lib/mysql/mysql.sock`
     
     - add mysql user
+    
     `name : create db
       community.mysql.mssql_db:
       name: vprofile
@@ -161,6 +169,7 @@ ex : change the port of ssh connection
 
 ### create our own ansible configuration
 - vim ansible.cfg
+
 `[default]
 host_key_checking =False
 inventory=inventory
@@ -175,3 +184,38 @@ become_ask_pass=False`
 - chown ubuntu. ubuntu /var/log/ansible.log
 - ansible-playbook db.yml (don't need to mention inventory, already in the config file)
 
+## Variable & debug
+we can define variable in playbooks, group vars, hosts vars, role, ...
+- vars :
+    http_port:80
+    sqluser:admin
+- Facts variables : ansible_os_family, ansible_processor_cores, ansible_kernel, ...
+- Store Output 
+- variable in playbook
+- before tasks add :
+
+`
+vars : 
+    dbname: electric
+    dbuser: current
+    dbpass: tesla
+`
+to call the variable : "{{dbname}}"
+- we can create task to print the variable
+  debug:
+    msg: "{{dbname}}"
+
+## variable outside playbook
+- mkdir group_vars
+- vim group_vars/all
+  dbname: sky
+  dbuser: pilot
+  dbpass: aircraft
+- run the playbook : comment the vars section inside playbook (playbook have higher priority)
+
+- host var
+- vim host_vars/web02
+USRNM: web02user
+COMM : variables from host_vars/web02 file
+
+- command line varibales (higher priority) : ansible-playbook -e USRNM=cliuser -e COMM=cliuser vars_precedence.yaml 
