@@ -261,4 +261,17 @@ tasks
                     enabled: yes
                     when: ansible_distribution =="Ubuntu"
 
-- 
+- run
+## loops
+tasks:
+    - name : install ntp agent on centos
+        yum :
+            name: "{{item}}"
+            state: present
+            when: ansible_distribution =="Centos"
+            loop:
+                - chrony
+                - wget
+                - git
+                - zip
+                - unzip
