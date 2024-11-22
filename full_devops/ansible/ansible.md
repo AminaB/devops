@@ -14,7 +14,7 @@ Running the tool multiple times won’t make changes if the system is already in
 - orchestration : combine many automations tools
 
 ## lunch VMS
-- lunch ubuntu EC2 : 22 allowed from my ip
+- lunch ubuntu EC2 for ansible: 22 allowed from my ip
 - lunch 3 centos9 EC2s: name web01(02) and db01, create client-key-pair, ssh from my ip, 22 from ansible-sg
 
 ## setup ansible 
@@ -90,29 +90,27 @@ good for quick task we repeat rarely ex : reboot machines
 ## Playbook and modules
 Playbooks provide a way to orchestrate complex tasks and manage configurations across multiple systems in a structured
 - vim web-app.yml
-`
--name: Webserver setup
+`name: Webserver setup
 hosts:
 become:yes
-tasks:
-  - name : Instal httpd
+tasks:`
+  `-name : Instal httpd
     ansible.builtin.yum
         name: httpd
-        state: present
-  - name : Start service
+        state: present`
+   `- name : Start service
     ansible.builtin.service
         name: httpd
         state: started
-        enabled:yes
-name: DBserver setup`
+        enabled:yes`
+`-name: DBserver setup
 hosts:
 become:yes
-tasks:
-  - name: Install mariadb-server
+tasks:`
+  `- name: Install mariadb-server
     ansible.builtin.yum:
         name: mariadb-server
-        state: present
-`
+        state: present`
 - remove httpd: ansible webservers -m yum -a "name=httpd state=absent" -i inventory --become
 - run : ansible-playbook -i inventory web-db.yaml (-v -vv -vvv -vvvv  for debugging information) (--syntax-check to check playbook syntax)
 - ansible modules : https://docs.ansible.com/ansible/2.9/modules/list_of_all_modules.html (ex: ansible.builtin.yum)
@@ -231,4 +229,36 @@ tasks
     debug:
         var: ansible_distribution
 - run
--   
+
+## Decision-making
+### provisioning chrony on centos and ntp on ubuntu
+- create file provisioning.yaml
+  - name: Provisioning servers
+      hosts : all
+      become: yes
+      tasks:
+          - name : install ntp agent on centos
+            yum :
+              name: chrony
+              state: present
+            when: ansible_distribution =="Centos"
+          - name : install ntp agent on ubuntu
+            apt :
+              name: ntp
+              state: present
+              update_cache: yes
+            when: ansible_distribution =="Ubuntu"
+          - name: start service on centos
+            service:
+                name: chroneyd
+                state: started
+                enabled: yes
+            when: ansible_distribution =="Centos"
+          - name: start service on centos
+                 service:
+                    name: ntp
+                    state: started
+                    enabled: yes
+                    when: ansible_distribution =="Ubuntu"
+
+- 
