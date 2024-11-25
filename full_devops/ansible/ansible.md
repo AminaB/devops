@@ -316,18 +316,55 @@ generated when setup module executed
 
 ### Template module 
 - create ntpconf_centos file in ansible server
-- copy from centos server /etc/chrony.conf content into ntpconf_centos file in ansible server
-<sub>
+  - copy from centos server /etc/chrony.conf content into ntpconf_centos file in ansible server
+  <sub>
 
-      - name: Configure NTP (ntp.conf)
-        ansible.builtin.template:
-            src: templates/ntpconf_centos.j2
-            dest: /etc/chrony.conf
-            backup: yes 
+        - name: deploy ntp agent conf on centos
+          ansible.builtin.template:
+              src: templates/ntpconf_centos.j2
+              dest: /etc/chrony.conf
+              backup: yes 
+          when: ansible_distribution =="Centos"
+        - name: ReStart service
+            service:
+              name: chroneyd
+              state: restarted
+              enabled: yes
             when: ansible_distribution =="Centos"
+- cons : service restart even there is no change
 - same for ubuntu machine
 <sub>
   
         dest : /etc/ntp.conf
 - add tasks to restart ntp on ubuntu and chronyd on centos
 - with template variable will be replaced by their values, template module is intelligent, no variable replacement with copy module
+
+## Handler
+- we do not want to restart the service
+  - only restart when configuration file  change
+  <sub>
+  
+        tasks:
+            - name: deploy ntp agent conf on centos
+              ansible.builtin.template:
+                  src: templates/ntpconf_centos.j2
+                  dest: /etc/chrony.conf
+                  backup: yes 
+                  when: ansible_distribution =="Centos"
+                  notify: 
+                    - ReStart service on centos
+            - name: ReStart service
+                service:
+                  name: chroneyd
+                  state: restarted
+                  enabled: yes
+                when: ansible_distribution =="Centos"
+        handlers:
+            - name: ReStart service on centos
+                service:
+                  name: chroneyd
+                  state: restarted
+                  enabled: yes
+                when: ansible_distribution =="Centos"
+  
+- add handler for ubuntu con too 
