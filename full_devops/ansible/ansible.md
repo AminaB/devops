@@ -27,14 +27,15 @@ Running the tool multiple times won’t make changes if the system is already in
 - cd exercise1
 ## Inventory file and test with ping command
 the inventory file defines the hosts (servers or devices) that Ansible manages.
+<sub>
 
-` # Inventory file: inventory.yaml
-all:
+    # Inventory file: inventory.yaml
+    all:
     hosts:
         web01:
             ansible_host: 192.168.1.10(private ip)
             ansible_user : ec2-user
-            ansible_ssh_private_key_file: clientkey.pem`
+            ansible_ssh_private_key_file: clientkey.pem
 
 - copy key : cat clientkey.pem
 - ssh to ansible server
@@ -52,32 +53,35 @@ To avoid interaction with console like "fingrtprint when ssh", we need to create
 - chmod 400 clientkey.pem
 - test : - ansible web01 -m ping -i inventory
 
-- test for web02 and db01
+  - test for web02 and db01
 
-- add group in inventory file 
-
-`children:
-webservers:
-  hosts:
-      web01:
-      web02:
-dbservers:
-  hosts:
-      db01:
-dc_oregon:
-  children:
-      webservers:
-      dbservers:`
+    - add group in inventory file
+  <sub>
+  
+            children:
+            webservers:
+              hosts:
+                  web01:
+                  web02:
+            dbservers:
+              hosts:
+                  db01:
+            dc_oregon:
+              children:
+                  webservers:
+                  dbservers:
+  
 - test : ansible webservers -m ping -i inventory
 - test : ansible dc_oregon -m ping -i inventory
 - test : ansible all -m ping -i inventory
 - test : ansible '*' -m ping -i inventory
 
-- test with vars (delete those lines at host level)
+  - test with vars (delete those lines at host level)
+  <sub>
 
-` vars:
-    ansible_ssh_user: ec2-user
-    ansible_ssh_private_key_file: clientkey.pem`
+          vars:
+              ansible_ssh_user: ec2-user
+              ansible_ssh_private_key_file: clientkey.pem
 
 ## Ad Hoc Commands
 good for quick task we repeat rarely ex : reboot machines
@@ -90,68 +94,77 @@ good for quick task we repeat rarely ex : reboot machines
 ## Playbook and modules
 Playbooks provide a way to orchestrate complex tasks and manage configurations across multiple systems in a structured
 - vim web-app.yml
-`name: Webserver setup
-hosts:
-become:yes
-tasks:`
-  `-name : Instal httpd
-    ansible.builtin.yum
-        name: httpd
-        state: present`
-   `- name : Start service
-    ansible.builtin.service
-        name: httpd
-        state: started
-        enabled:yes`
-`-name: DBserver setup
-hosts:
-become:yes
-tasks:`
-  `- name: Install mariadb-server
-    ansible.builtin.yum:
-        name: mariadb-server
-        state: present`
+<sub>
+
+      - name: Webserver setup
+      hosts:
+      become:yes
+      tasks:
+        -name : Instal httpd
+          ansible.builtin.yum
+              name: httpd
+              state: present
+         - name : Start service
+          ansible.builtin.service
+              name: httpd
+              state: started
+              enabled:yes
+- db config
+<sub>
+
+        - name: DBserver setup
+        hosts:
+        become:yes
+        tasks:
+          - name: Install mariadb-server
+            ansible.builtin.yum:
+                name: mariadb-server
+                state: present
+
 - remove httpd: ansible webservers -m yum -a "name=httpd state=absent" -i inventory --become
 - run : ansible-playbook -i inventory web-db.yaml (-v -vv -vvv -vvvv  for debugging information) (--syntax-check to check playbook syntax)
 - ansible modules : https://docs.ansible.com/ansible/2.9/modules/list_of_all_modules.html (ex: ansible.builtin.yum)
 - test copy file : https://docs.ansible.com/ansible/2.9/modules/copy_module.html#copy-module
+<sub>
 
-`- name: Copy file with owner and permissions
-  copy:
-  src: files/index.html
-  dest: /var/www/html/index.html
-  backup: yes`
+        - name: Copy file with owner and permissions
+          copy:
+          src: files/index.html
+          dest: /var/www/html/index.html
+          backup: yes`
 - tes db modules : https://docs.ansible.com/ansible/2.9/modules/mssql_db_module.html#mssql-db-module
+- require python >= 2.7 or pymssql
+  - check in db01 server the exact package name : yum search python | grep -i mysql
+<sub>
+  
+        # Create a new database with name 'accounts'
+        - name : create db
+        mssql_db:
+        name: accounts
+        state: present`      
+            `-name : Instal pymysql
+                  ansible.builtin.yum
+                  name: python3-PyMySQL
+                  state: present`
+- resolve access denied for user root@localhost : ansible can't connect to mysql server
+<sub>
 
-`# Create a new database with name 'accounts'
-name : create db
-mssql_db:
-name: accounts
-state: present`
-  - require python >= 2.7 or pymssql
-    - check in db01 server the exact package name : yum search python | grep -i mysql 
-      
-    `-name : Instal pymysql
-          ansible.builtin.yum
-          name: python3-PyMySQL
-          state: present`
-    - resolve access denied for user root@localhost : ansible can't connect to mysql server
-    
-    `name : create db
-      community.mysql.mssql_db:
-      name: accounts
-      state: present
-      login_unix_socket: /var/lib/mysql/mysql.sock`
-    
-    - add mysql user
-    
-    `name : create db
-      community.mysql.mssql_db:
-      name: vprofile
-      password: 12345
-      priv :'*.*:ALL
-      state: present
-      login_unix_socket: /var/lib/mysql/mysql.sock`
+        - name : create db
+          community.mysql.mssql_db:
+          name: accounts
+          state: present
+          login_unix_socket: /var/lib/mysql/mysql.sock
+
+- add mysql user
+<sub> 
+
+          - name : create db
+            community.mysql.mssql_db:
+            name: vprofile
+            password: 12345
+            priv :'*.*:ALL
+            state: present
+            login_unix_socket: /var/lib/mysql/mysql.sock
 
 ## Ansible configuration
 ex : change the port of ssh connection
@@ -167,16 +180,17 @@ ex : change the port of ssh connection
 
 ### create our own ansible configuration
 - vim ansible.cfg
+<sub>
 
-`[default]
-host_key_checking =False
-inventory=inventory
-forks =5
-log_path =/var/log/ansible.log
-[privilege_escalation]
-become=true
-become_method=sudo
-become_ask_pass=False`
+            [default]
+            host_key_checking =False
+            inventory=inventory
+            forks =5
+            log_path =/var/log/ansible.log
+            [privilege_escalation]
+            become=true
+            become_method=sudo
+            become_ask_pass=False
 - save
 - sudo touch /var/log/ansible.log
 - chown ubuntu. ubuntu /var/log/ansible.log
@@ -191,87 +205,129 @@ we can define variable in playbooks, group vars, hosts vars, role, ...
 - Store Output 
 - variable in playbook
 - before tasks add :
+<sub>
 
-`
-vars : 
-    dbname: electric
-    dbuser: current
-    dbpass: tesla
-`
+        vars : 
+            dbname: electric
+            dbuser: current
+            dbpass: tesla
+
 to call the variable : "{{dbname}}"
 - we can create task to print the variable
-  debug:
-    msg: "{{dbname}}"
+<sub>
+
+          debug:
+            msg: "{{dbname}}
 
 ## variable outside playbook
 - mkdir group_vars
-- vim group_vars/all
-  dbname: sky
-  dbuser: pilot
-  dbpass: aircraft
-- run the playbook : comment the vars section inside playbook (playbook have higher priority)
+  - vim group_vars/all
+<sub>
+  
+        dbname: sky
+        dbuser: pilot
+        dbpass: aircraft
+- run the playbook : comment the vars section inside playbook (playbook vars have higher priority)
 
-- host var
+### host var
 - vim host_vars/web02
-USRNM: web02user
-COMM : variables from host_vars/web02 file
+<sub>
 
-- command line varibales (higher priority) : ansible-playbook -e USRNM=cliuser -e COMM=cliuser vars_precedence.yaml
+        USRNM: web02user
+        COMM : variables from host_vars/web02 file
+
+### command line varibales (higher priority) : ansible-playbook -e USRNM=cliuser -e COMM=cliuser vars_precedence.yaml
   https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html
 ## Fact variables : runtime variables
 generated when setup module executed
-- we can disable these variables : 
-gather_fasts: FALSE
+- we can disable these variables :
+<sub>
+
+        gather_fasts: FALSE
 - ansible -m setup web01 : to see fact variables for web01
-- print variable using playbook
-tasks
-  - name: print os name
-    debug:
-        var: ansible_distribution
+  - print variable using playbook
+  <sub>
+      
+          tasks
+            - name: print os name
+              debug:
+                  var: ansible_distribution
 - run
 
 ## Decision-making
 ### provisioning chrony on centos and ntp on ubuntu
 - create file provisioning.yaml
-  - name: Provisioning servers
-      hosts : all
-      become: yes
-      tasks:
-          - name : install ntp agent on centos
-            yum :
-              name: chrony
-              state: present
-            when: ansible_distribution =="Centos"
-          - name : install ntp agent on ubuntu
-            apt :
-              name: ntp
-              state: present
-              update_cache: yes
-            when: ansible_distribution =="Ubuntu"
-          - name: start service on centos
-            service:
-                name: chroneyd
-                state: started
-                enabled: yes
-            when: ansible_distribution =="Centos"
-          - name: start service on centos
-                 service:
-                    name: ntp
+<sub>
+
+      - name: Provisioning servers
+          hosts : all
+          become: yes
+          tasks:
+              - name : install ntp agent on centos
+                yum :
+                  name: chrony
+                  state: present
+                when: ansible_distribution =="Centos"
+              - name : install ntp agent on ubuntu
+                apt :
+                  name: ntp
+                  state: present
+                  update_cache: yes
+                when: ansible_distribution =="Ubuntu"
+              - name: start service on centos
+                service:
+                    name: chroneyd
                     state: started
                     enabled: yes
-                    when: ansible_distribution =="Ubuntu"
+                when: ansible_distribution =="Centos"
+              - name: start service on ubunt
+                     service:
+                        name: ntp
+                        state: started
+                        enabled: yes
+                        when: ansible_distribution =="Ubuntu"
 
 - run
-## loops
-tasks:
-    - name : install ntp agent on centos
-        yum :
-            name: "{{item}}"
-            state: present
+## Loops
+- loops
+<sub>
+
+        tasks:
+            - name : install ntp agent on centos
+                yum :
+                    name: "{{item}}"
+                    state: present
+                    when: ansible_distribution =="Centos"
+                    loop:
+                        - chrony
+                        - wget
+                        - git
+                        - zip
+                        - unzip
+
+## Files
+- file
+<sub>
+
+      - name: Banner file
+          copy:
+              content: '# This is manged by ansible. no manual changes please'
+              dest: /etc/motd
+
+### Template module 
+- create ntpconf_centos file in ansible server
+- copy from centos server /etc/chrony.conf content into ntpconf_centos file in ansible server
+<sub>
+
+      - name: Configure NTP (ntp.conf)
+        ansible.builtin.template:
+            src: templates/ntpconf_centos.j2
+            dest: /etc/chrony.conf
+            backup: yes 
             when: ansible_distribution =="Centos"
-            loop:
-                - chrony
-                - wget
-                - git
-                - zip
-                - unzip
+- same for ubuntu machine
+<sub>
+  
+        dest : /etc/ntp.conf
+- add tasks to restart ntp on ubuntu and chronyd on centos
+- with template variable will be replaced by their values, template module is intelligent, no variable replacement with copy module
