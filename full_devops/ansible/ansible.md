@@ -436,3 +436,65 @@ reusable in different project or different env, and structured
 - it is better to create role by yourself, with downloaded role sometimes it's can be hard to do Custom Features
 - you can also learn from downloaded roles to create your own
 - ansible is easy to write (use documentation)
+
+## Ansible for AWS
+### Authentication
+- export access keys
+- create iam user : ansible-admin, AdministratorAcces, generte Access keys, download csv file
+  - run into ansible-server:
+      export AWS_ACCESS_KEY_ID='AK123'
+      export AWS_SECRET_ACCESS_KEY='abc123'
+  - but when you exit this variable are gone, so add it to .bashrc file
+- vim .bashrc : add at the en of the file
+  export AWS_ACCESS_KEY_ID='AK123'
+  export AWS_SECRET_ACCESS_KEY='abc123'
+- run : source .bashrc (or logout and login)
+- authentication is done
+
+### Ansible playbook for key pair
+- mkdir aws
+- cd aws
+  - vim test-aws.yml
+  <sub>
+
+        - hosts: localhost
+          gather_facts: False
+          tasks:
+            - name : Create key pair
+              ec2_key:
+                name : sample
+                region : us-east-1
+              register: keyout
+            #- name: print key
+              # debug:
+                 # var: keyout
+            - name: save private key content
+              copy:
+                content: "{{keyout.key.private_key}}"
+                dest: ./sample-key.pem
+              when: keyout.changed
+
+- ansible need python(boto3) to access libraries
+  sudo apt install python3-pip -y
+  pip3.10 install boto3
+- run : ansible-playbook test-aws.yml
+### Ansible run an EC2 instance : https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_instance_module.html
+- install aws collection : ansible-galaxy collection install amazon.aws
+- add to playbooks
+<sub>
+
+      - name: start an instance with a public IP address
+        amazon.aws.ec2_instance:
+          name: "public-compute-instance"
+          key_name: "sample"
+          #vpc_subnet_id: subnet-5ca1ab1e
+          instance_type: t2.micro
+          security_group: default
+          # network_interfaces:
+            # - assign_public_ip: true
+          image_id: ami-016b213e65284e9c9
+          exact_count: 1
+          region: us-east-1
+          tags:
+            Environment: Testing
+- test it and terminate instance,  delete key
