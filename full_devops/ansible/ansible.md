@@ -313,6 +313,14 @@ generated when setup module executed
           copy:
               content: '# This is manged by ansible. no manual changes please'
               dest: /etc/motd
+- create folder
+- add in playbook : vars : mydir: /opt/dir22 
+<sub>
+
+      - name: Create Folder
+          copy:
+              path: "{{mydir}}"
+              state: directory
 
 ### Template module 
 - create ntpconf_centos file in ansible server
@@ -367,4 +375,64 @@ generated when setup module executed
                   enabled: yes
                 when: ansible_distribution =="Centos"
   
-- add handler for ubuntu con too 
+- add handler for ubuntu conf too 
+## Roles :
+reusable in different project or different env, and structured
+## create folders structures
+- mkdir roles
+- cd roles
+- ansible-galaxy init post-install
+- copy groupvars_all content form exercise15 into roles/post-install/vars/main.yaml
+- copy other variables (playbook, ...) too inside roles/post-install/vars/main.yaml
+- remove groupvars_all and host_vars
+- cp files/*  roles/post-install/files/
+- cp templates/*  roles/post-install/templates
+- copy handlers from playbook to roles/post-install/handlers/main.yaml (delete extra spaces)
+- copy tasks from playbook to roles/post-install/tasks/main.yaml
+- delete handlers and task inside playbook
+- rm -fr files templates
+<sub>
+
+      - name: Provisioning servers
+        hosts : all
+        become: yes
+        roles:
+          - post-install
+     
+- don't need to give template path in tasks, or files path, just the name of the file 
+  - vim roles/post-install/tasks/main.yaml
+  <sub>
+
+        - name: deploy ntp agent conf on centos
+          ansible.builtin.template:
+            src: ntpconf_centos.j2
+            dest: /etc/chrony.conf
+            ...
+
+- test the playbook 
+  - we can also copy the variables inside roles/post-install/defaults/main.yaml ( but it has lower priority)
+    - we can overwrite variable
+    <sub>
+
+          - name: Provisioning servers
+            hosts : all
+            become: yes
+            roles:
+              - role : post-install
+                  vars :
+                    ntp0: 0.europe.pool.ntp.org
+                    ntp1: 1.europe.pool.ntp.org
+                    ntp2: 2.europe.pool.ntp.org
+                    ntp3: 3.europe.pool.ntp.org
+  
+- we can download roles created by others here : https://galaxy.ansible.com
+- download java role setup : ansible-galaxy install geerlingguy.java
+<sub>
+  
+      roles:
+        - role: geerlingguy.java
+        - role: post-install
+
+- it is better to create role by yourself, with downloaded role sometimes it's can be hard to do Custom Features
+- you can also learn from downloaded roles to create your own
+- ansible is easy to write (use documentation)
