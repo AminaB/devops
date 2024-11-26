@@ -10,7 +10,7 @@ Running the tool multiple times won’t make changes if the system is already in
 ## use cases
 - automation
 - change management : production servers change
-- previsioning
+- provisioning
 - orchestration : combine many automations tools
 
 ## lunch VMS
