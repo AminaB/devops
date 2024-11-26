@@ -5,7 +5,7 @@ In this setup, I'll manually build and deploy a project (Vprofile projetc BY @hk
 EC2 instances, Elastic Load Balancer (ELB), Auto Scaling Group (ASG), ACM, and S3.
 ***
 ## The final result
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/webpagelogin_with_domain_name.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/webpagelogin_with_domain_name.png)
 ## previous 
 Multi tier web app stack : Vprofile project running in VMs created by vagrant file
 ### Scenario
@@ -49,7 +49,7 @@ Multi tier web app stack : Vprofile project running in VMs created by vagrant fi
 - login to aws account (use iam user with admin access not root)
 - create Certificate in ACM for my godaddy domain : barryit.xyz
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/certificateACM.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/certificateACM.png)
 
 ### create SGs (for LB, EC2s, and backend services: mysql, memcached, rabbit mq)
 - LB SG  : allow http traffic and https from everywhere
@@ -63,7 +63,7 @@ Multi tier web app stack : Vprofile project running in VMs created by vagrant fi
     - all traffic : for the SG itself (internal traffic on all port)
     - 22 from my ip
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/SGs.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/SGs.png)
 ### Launch instances with user data (bash scripts)
 - create Key Pairs to log into EC2 instances using ssh
 - name : vprofile-db01 : with mysql.sh as user data. choose the backend security group and amazon linux
@@ -89,7 +89,7 @@ Multi tier web app stack : Vprofile project running in VMs created by vagrant fi
   - systemctl status tomcat9
   -  ls /var/lib/tomcat9/
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/ec2s.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/ec2s.png)
 
 ### ip to name mapping in Route 53 (in vagrant we used to use /etc/hosts file to map name to a VM ip, it is local) 
 - go to route 53 in aws console
@@ -100,7 +100,7 @@ Multi tier web app stack : Vprofile project running in VMs created by vagrant fi
 - click on create hosted zone
 - create record -> simple record for db01,mc01, and rmq01 (use the private ips for records)
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/route53HostedZone.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/route53HostedZone.png)
 
 ### build app from source code (create artifact)
 - cd vprofile-project
@@ -112,7 +112,7 @@ Multi tier web app stack : Vprofile project running in VMs created by vagrant fi
 - create s3 with cli : aws s3 mb s3://aminatoucoder-vpro-arts
 - copy artifact in s3 :  aws s3 cp target/vprofile-v2.war s3://aminatoucoder-vpro-arts
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/s3.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/s3.png)
 ### copy artifact from s3 to tomcat ec2 instance
 - create iam role for ec2 instance to Allows EC2 instances to use S3 service (full access) : aminacoder-vprofile-role
 - attach aminacoder-vprofile-role to app01 via actions -> security
@@ -132,7 +132,7 @@ Multi tier web app stack : Vprofile project running in VMs created by vagrant fi
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/TG.png)
 - create App LB : name vprofile-prod-elb, select all AZ, select  ELB SG, add https listener, and the certificate
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/LB.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/LB.png)
 - map elb to website name in godaddy dns
   - copy dsn name from elb and add record in godaddy -> DNS -> add record (with value : vprofile-prod-elb-1448622209.us-east-1.elb.amazonaws.com)
 ***
@@ -140,12 +140,12 @@ Multi tier web app stack : Vprofile project running in VMs created by vagrant fi
 ### verify
 - got to  https://vprofileapp.barryit.xyz/index
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/webpagelogin_with_domain_name.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/webpagelogin_with_domain_name.png)
 ### build autoscaling group for tomcat instances.
 - create AMI from app01 : vprofile-app-image
 - create launch template from AMI : vprofile-app-LC, create tag : name =Vprofile-app, resource types : {volumes, instances}. in advanced section choose the iam role (aminacoder-vprofile-role)
 ***
-![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/LT.png)
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/LT.png)
 - create ASG : vprofile-app-ASG, select all zones, add TG, tags,...
 - terminate app01
 - enable stickiness in TG
