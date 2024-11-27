@@ -1,8 +1,8 @@
 # Networking component
-- twor or more devices
+- two or more devices
 - cables as link or wireless
 - network interface card (nic) in each device
-- switches : ro connect networks interfaces together 
+- switches : to connect networks interfaces together 
 - router : to connect networks together 
 - OS
 
@@ -11,7 +11,7 @@
 - setup standard to communicate each other
 - communication model
 - 7 layers : app, presentation, session, transport, network, data link,,physical
-- each layer provide something to the next : 
+- each layer provide something to the next 
 
 # network classification by geography
 - LAN : local area network :
@@ -28,7 +28,7 @@
 # protocols 
 - Layer 4 trasport : TCP,  UDP
 - TCP : reliable protocol, reliability. FTP, HTTP, HTTPS
-- UDB : ureliable protocol, faster. speed matter more that reliability. DSN, DHCP, TFTP, ARP, RARP
+- UDP : ureliable protocol, faster. speed matter more that reliability. DSN, DHCP, TFTP, ARP, RARP
 
 # networking command
 - ssh web01
