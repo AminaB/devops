@@ -84,3 +84,25 @@ at least 2 zones
 - save
 
 ### add NAT gateway to private subnets
+- Create EIP to associate to NAT gateway
+#### Create NAT gateway
+Nat gateway lives in the pub subnet and connect to internet through the internet gateway
+- name : vpro-NAT-GW
+- subnet : pub-sub1
+- select the EIP
+- create
+#### create route table for the private subnet
+- name : vpro-priv-RT
+- select vpc
+- create
+- subnet association
+  - select two private subnet
+- routes tables
+  - Edit routes
+  - 0.0.0.0/0, target : Nat Gateway, select the nat gateway
+
+### enable hostname in vpc
+it allows ec2 to have hostname when they are lunched inside vpc.
+- got to vpc
+- edit settings
+- check "Enable DNS hostname"
