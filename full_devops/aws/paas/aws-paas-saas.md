@@ -179,7 +179,7 @@ objective : flexible infra, no upfront cost, Iaac, paas
   - alternate domain name= vprofile.barryit.xyz -> select certificate -> security policy = tlSv1
 ***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/CDNCloudFront.png)
-- update entry in goDaddy dsn zone
+- update entry in goDaddy dns zone
   - CNAME name = vprofile and value =dc5fzhfuyvwc9.cloudfront.net
 - test the url :  https://vprofile.barryit.xyz
 ***
