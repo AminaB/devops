@@ -37,7 +37,7 @@ Multi tier web app stack : Vprofile project running in VMs created by vagrant fi
 - Route 53 : private DNS service
 
 ### aws stack
-- user access the site by using url (this url mentioned in goDaddy DSN)
+- user access the site by using url (this url mentioned in goDaddy DNS)
 - this endpoint connect to the LB using https, the certificate for https encryption will be in ACM
 - the ALB SG allow only https traffic
 - the ALB route to Tomcat in set of EC2 managed by ASG (these ec2 instances are in the same SG AND allow traffic on 8080 only from LB)
@@ -134,7 +134,7 @@ Multi tier web app stack : Vprofile project running in VMs created by vagrant fi
 ***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/LB.png)
 - map elb to website name in godaddy dns
-  - copy dsn name from elb and add record in godaddy -> DNS -> add record (with value : vprofile-prod-elb-1448622209.us-east-1.elb.amazonaws.com)
+  - copy dns name from elb and add record in godaddy -> DNS -> add record (with value : vprofile-prod-elb-1448622209.us-east-1.elb.amazonaws.com)
 ***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/domain.png)
 ### verify
