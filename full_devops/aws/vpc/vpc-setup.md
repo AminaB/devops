@@ -36,11 +36,11 @@ create our logical data center with vpc, our own private network
   - with route tables ec2 for ex can know if it has to connect to nat gateway or internet gateway
 ### high availability
 at least 2 zones
-- all subnets can communicate each other, either they are public or private
-- one nat gateway by public subnet (aws will charge you on nat gateway)
+- inside a VPC, all subnets can communicate each other, either they are public or private
+- create one nat gateway by public subnet (aws will charge you on nat gateway)
 - a subnet is assigned to a zone
 - 2 public subnet (zone1 and 2), and 2 private subnets
-- each subnet has its own route table
+- each subnet has its own route table, you can create 1 RT for all pub subnets and 1 for private
 
 ## VPC hands-on 
 ### Setup Details
@@ -56,41 +56,54 @@ at least 2 zones
 - 2 nat gateway
 - 2 EIP for each nat gateway
 - 2 routes tables : 1 pub, 1 private subnet
-- 1 Bastion host in pub subnet : we can access instances ine public subnet
-- NACL : firewall for subnet, in the opposite of SG(just allow) we have allow/deny rules
+- 1 Bastion host in pub subnet : we can access instances in public subnet
+- NACL : firewall for subnet, in the opposite of SG(just allow) we have to set allow/deny rules
 - 1 more VPC => VPC Peering
 - never delete default vpc and default igw
 ### create VPC 
 - vpc only
 - name : vprofile-vpc
 - CIDR : 172.20.0.0/16
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/vpc.png)
 ### create subnets
 - select the right vpc not default one
 - create all 4 sub at the same time 
-
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/subnets.png)
 ### make public subnet public by adding internet gateway to their route table
 #### crete internet gateway 
 - name : vprofile-IGW
 - create
 - action -> attach to vpc 
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/IGW.png)
 #### connect IGW to public subnet through route table
 - create route table, name : vpro-pub-RT -> create
 - edit subnet association 
 - select the two public subnets
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/Routes-Tables.png)
 - edit routes : 0.0.0.0/0, target : internet gateway, select the IGW
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/edit-routes-pub.png)
 #### enable public ip on pub subnets
 - go to public subnet
 - action -> Edit subnet settings -> check "Enable auto-assign public IPv4 address"
 - save
 
-### add NAT gateway to private subnets
+### add NAT gateway for private subnets
 - Create EIP to associate to NAT gateway
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/EIP.png)
 #### Create NAT gateway
 Nat gateway lives in the pub subnet and connect to internet through the internet gateway
 - name : vpro-NAT-GW
 - subnet : pub-sub1
 - select the EIP
 - create
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/nat-gateway.png)
 #### create route table for the private subnet
 - name : vpro-priv-RT
 - select vpc
@@ -100,7 +113,8 @@ Nat gateway lives in the pub subnet and connect to internet through the internet
 - routes tables
   - Edit routes
   - 0.0.0.0/0, target : Nat Gateway, select the nat gateway
-
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/RT-with-priv.png)
 ### enable hostname in vpc
 it allows ec2 to have hostname when they are lunched inside vpc.
 - got to vpc
@@ -126,12 +140,13 @@ for the bastion host use ami that are very secure
   - select key-pair
   - edit network : select the public subnet
   - lunch
-  
+
 #### test the pub subnet
 - test if we can ssh to ec2 "bastion"
-
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/ssh-tobastion-host.png)
 ### lunch instance into private subnet and add website on it, create LB in pub subnet to access to the website 
-#### ssh to private subnet
+#### ssh to ecé in private subnet
 for that we need to ssh into bastion and then ssh to the private subnet
 - create key pair and copy it inside bastion server
   - name : web-key
@@ -146,14 +161,20 @@ for that we need to ssh into bastion and then ssh to the private subnet
   - lunch
 - ssh to bastion host
   - ssh to private ec2 web01-priv : ssh -i web-key.pem ec2-user@privateip
-  - sui -i
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/ssh-web01-priv.png)
+  - sudo -i
   - yum install httpd wget unzip -y
   - wget https://www.tooplate.com/zip-templates/2136_kool_form_pack.zip
   - unzip 2136_kool_form_pack.zip
   - cp -r 2136_kool_form_pack/* /var/www/html/
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/copy-web-key.png)
   -  systemctl restart httpd
 #### create LB inside public subnet
 - create TG (do not forget to add web-01-priv as pending below)
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/tg.png)
 - create web-elb-sg for LB : allow 80 from everywhere
 - create lb
   - application
@@ -161,12 +182,14 @@ for that we need to ssh into bastion and then ssh to the private subnet
   - select vpc
   - select pub subnet for two zones
   - select tg
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/lb.png)
 - edit inbound rule in web01-sg
   - allow http (80) from web-elb-sg
 - check if instance is healthy in tg
-
 #### test
-
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/website-with-elb.png)
 ### clean up chargeable resources
 - delete elb
 - terminate instances
@@ -199,6 +222,8 @@ for now subnets do not know how to route the traffic, to fix that :
   - routes -> edit routes
   - destination : 172.22.0.0/16
   - target : select the peering connection
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/routes_priv_subnet_forPeering.png)
 - add rules inside vpc routes table vprodb-rt in oregon
   - routes -> edit routes
   - destination : 172.20.0.0/16
@@ -210,6 +235,8 @@ ex :
 - add inbound rules
 - add a specific ip address or subnet ip range or 172.22.0.0/16
 - here we allow ssh from 172.22.2.0/24
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/rules_SG-to_Allow_traffic_FromOtherVPC.png)
 
 #### clean up,
 - delete peering connection in oregon
@@ -239,6 +266,9 @@ ex :
 or 
 - aws s3 sync /tmp/log-wave/wave-web01-httpdlogs19122024.tar.gz s3://wave-web-log-3103
 - rm -rf /tmp/log-wave/
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/ec2logs_s3.png)
+
 - it is better to do these tasks with script( bash, python, ansible,...) ad scheduled it in a cron job
 
 # logs dashboard : cloudwatch logs
@@ -258,11 +288,13 @@ use cloudwatch to stream the log, analyse, create alarms, send its to elastic se
   - vi /var/awslog/etc/awslogs.conf
 - you can send it to s3 bucket
   - in the aws console cloudwatch directly -> action -> export to s3
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/cloudwatch-logs-stream.png)
 - you can create our own metric and alarm
   - Create filter pattern like hacker ip, ... 
 
 ## enable logs for classic LB in S3 buckets
-- we cannot attach role to LB, so you need to attach policy to s3 bucket to giv LB the authorization to put logs
+- we cannot attach role to LB, so you need to attach policy to s3 bucket to give LB the authorization to put logs
 <pub>
       
       {
