@@ -146,7 +146,7 @@ for the bastion host use ami that are very secure
 ***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/ssh-tobastion-host.png)
 ### lunch instance into private subnet and add website on it, create LB in pub subnet to access to the website 
-#### ssh to ecé in private subnet
+#### ssh to ec2 in private subnet
 for that we need to ssh into bastion and then ssh to the private subnet
 - create key pair and copy it inside bastion server
   - name : web-key
@@ -262,6 +262,7 @@ ex :
 - aws s3 help : to see command option
 - create iam user with right to access and modify s3 bucket (you can also do it by iam role)
   - name : s3admin with s3 full access policy
+- aws configure
 - aws s3 cp /tmp/log-wave/wave-web01-httpdlogs19122024.tar.gz s3://wave-web-log-3103
 or 
 - aws s3 sync /tmp/log-wave/wave-web01-httpdlogs19122024.tar.gz s3://wave-web-log-3103
@@ -269,7 +270,7 @@ or
 ***
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/vpc/ec2logs_s3.png)
 
-- it is better to do these tasks with script( bash, python, ansible,...) ad scheduled it in a cron job
+- it is better to do these tasks with script( bash, python, ansible,...) and scheduled it in a cron job
 
 # logs dashboard : cloudwatch logs
 use cloudwatch to stream the log, analyse, create alarms, send its to elastic search,...
