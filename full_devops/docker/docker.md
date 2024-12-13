@@ -1,4 +1,4 @@
-# commmand
+# command
 - systemctl status docker
 - docker run image
 - docker ps
@@ -11,4 +11,4 @@
 - vagrant ssh 
 - docker compose up -d
 - docker compose down 
-- 
+

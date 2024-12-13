@@ -42,3 +42,6 @@
   web02
   web03
 - for $host in `cat $hostname`; do ssh devops@$host sudo yum install git; done 
+
+### commands
+- du -sh directory : to see the size of directory
