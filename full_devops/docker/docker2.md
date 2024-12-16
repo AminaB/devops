@@ -1,6 +1,9 @@
 # docker 
+container runtime environment
 isolate services without running many VMs, Vms are Expensive (OS need license, take time to boot,..).
 docker manage containers with docker engine
+## docker organization 
+we can create organization on dockerhub to collaborate with other developer
 ## containers
 package software to ship and deploy easily.
 containers offer isolation not virtualization, container virtualizes the os and VMs virtualize the hardware.
