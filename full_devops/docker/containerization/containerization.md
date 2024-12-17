@@ -29,3 +29,7 @@
 - aminatoubarry/vprofildb
 - aminatoubarry/vprofileapp
 
+## Create dockerfiles
+- app
+- web
+- db

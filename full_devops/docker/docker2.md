@@ -67,4 +67,4 @@ we cannot remove image if container is running from that image
 - run multi containers together 
 - make services talk to each other
 ## multi stage docker file 
-- to avoid heavy container with many KB.
+- to avoid heavy container with many content, like building app.
