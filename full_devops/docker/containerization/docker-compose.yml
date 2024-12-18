@@ -3,26 +3,30 @@ services:
   vprodb:
     build:
       context: ./db
-    image: aminatoubarry/vprofileweb
+    image: aminatoubarry/vprofiledb
     container_name: vprodb
     ports:
       - "3306:3306"
     volumes:
       - vprodbdata:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD= vprodbpass
+      - MYSQL_ROOT_PASSWORD=vprodbpass
+
   vprocache01:
     image: memcached
+    container_name: vprocache01
     ports:
       - "11211:11211"
 
   vpromq01:
     image: rabbitmq
+    container_name: vprormq01
     ports:
-      - "15672:15672"
+      - "5672:5672"
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
+
   vproapp:
     build:
       context: ./app
@@ -35,7 +39,7 @@ services:
 
   vproweb:
     build:
-      context: ./aweb
+      context: ./web
     image: aminatoubarry/vprofileweb
     container_name: vproweb
     ports:

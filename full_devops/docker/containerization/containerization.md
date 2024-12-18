@@ -1,5 +1,5 @@
 # Containerize vprofile project 
-
+In this setup I containerized a project using Dockerfile and docker compose
 ## tools and version 
 - MySQL (Database SVC)        => 8.0.33
 - Memcache (DB Caching SVC)   => 1.6 
@@ -26,10 +26,37 @@
 
 ## Create Repo in dockerHub
 - aminatoubarry/vprofileweb
-- aminatoubarry/vprofildb
+- aminatoubarry/vprofiledb
 - aminatoubarry/vprofileapp
 
-## Create dockerfiles
+## Create dockerfiles and compose
 - app
 - web
 - db
+- docker compose file
+## build and run 
+- docker compose build
+- docker images
+- docker compose up -d
+
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/docker/containerization/images.png)
+
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/docker/containerization/containers.png)
+## test 
+- localhost:80
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/docker/containerization/result.png)
+## push images to docker hub
+- docker login
+- docker push aminatoubarry/vprofileweb
+- docker push aminatoubarry/vprofileapp
+- docker push aminatoubarry/vprofiledb
+***
+![alt text](https://github.com/AminaB/devops/blob/master/full_devops/docker/containerization/docker-hub-images.png)
+## clean up
+- docker compose down
+- docker system prune -a
+- docker volume prune -f
+- docker volume ls -q | xargs docker volume rm (delete used volume)
