@@ -59,4 +59,4 @@ In this setup I containerized a project using Dockerfile and docker compose
 - docker compose down
 - docker system prune -a
 - docker volume prune -f
-- docker volume ls -q | xargs docker volume rm (delete used volume)
+- docker volume ls -q | xargs docker volume rm (delete used volumes)
