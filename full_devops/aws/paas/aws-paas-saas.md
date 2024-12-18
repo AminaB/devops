@@ -6,7 +6,7 @@ AWS Paas (ElasticBeanStalk), CDN (Cloudfront),RDS, Active MQ, Elastic cache, ACM
 ## The final result
 ![alt text](https://github.com/AminaB/devops/blob/master/full_devops/aws/paas/resultDeplowithSSL.png)
 ## prerequisite
-- aws-lift-shift-app-workload.md : https://github.com/AminaB/devops/blob/master/full_devops/aws/aws-lift-shift-app-workload.md
+- aws-lift-shift-app-workload.md : https://github.com/AminaB/devops/blob/master/full_devops/aws/lift-shift/aws-lift-shift-app-workload.md
 
 # refactoring or re-architect with aws to improve business continuity and boost agility
 objective : flexible infra, no upfront cost, Iaac, paas
