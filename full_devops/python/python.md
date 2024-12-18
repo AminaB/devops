@@ -1,8 +1,8 @@
 # python in ci cd pipeline
-NB : always prioritize ansible and terraform to python, when it's come to do configuration management.
-Use python when terraform ans ansible are not satisfying your work.
-we can use python to execute task in jenkins, like OS task.
-there is many python libraries for jenkins, to execute task on jenkins from python.
+- NB : always prioritize ansible and terraform to python, when it's come to do configuration management.
+- Use python when terraform ans ansible are not satisfying your work.
+- we can use python to execute task in jenkins, like OS task.
+- there is many python libraries for jenkins, to execute task on jenkins from python.
 # python libraries
 - python-jenkins : you can create job, copy existing job, delete job, install plugins,...
 - python boto : for aws services

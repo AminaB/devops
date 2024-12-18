@@ -75,7 +75,6 @@ To avoid interaction with console like "fingrtprint when ssh", we need to create
 - test : ansible dc_oregon -m ping -i inventory
 - test : ansible all -m ping -i inventory
 - test : ansible '*' -m ping -i inventory
-
   - test with vars (delete those lines at host level)
   <sub>
 
@@ -121,6 +120,7 @@ Playbooks provide a way to orchestrate complex tasks and manage configurations a
                 name: mariadb-server
                 state: present
 
+
 - remove httpd: ansible webservers -m yum -a "name=httpd state=absent" -i inventory --become
 - run : ansible-playbook -i inventory web-db.yaml (-v -vv -vvv -vvvv  for debugging information) (--syntax-check to check playbook syntax)
 - ansible modules : https://docs.ansible.com/ansible/2.9/modules/list_of_all_modules.html (ex: ansible.builtin.yum)
@@ -132,6 +132,8 @@ Playbooks provide a way to orchestrate complex tasks and manage configurations a
           src: files/index.html
           dest: /var/www/html/index.html
           backup: yes`
+
+
 - tes db modules : https://docs.ansible.com/ansible/2.9/modules/mssql_db_module.html#mssql-db-module
 - require python >= 2.7 or pymssql
   - check in db01 server the exact package name : yum search python | grep -i mysql
@@ -146,6 +148,8 @@ Playbooks provide a way to orchestrate complex tasks and manage configurations a
                   ansible.builtin.yum
                   name: python3-PyMySQL
                   state: present`
+
+
 - resolve access denied for user root@localhost : ansible can't connect to mysql server
 <sub>
 
@@ -154,6 +158,8 @@ Playbooks provide a way to orchestrate complex tasks and manage configurations a
           name: accounts
           state: present
           login_unix_socket: /var/lib/mysql/mysql.sock
+
+
 
 - add mysql user
 <sub> 
@@ -191,6 +197,8 @@ ex : change the port of ssh connection
             become=true
             become_method=sudo
             become_ask_pass=False
+
+
 - save
 - sudo touch /var/log/ansible.log
 - chown ubuntu. ubuntu /var/log/ansible.log
@@ -212,6 +220,7 @@ we can define variable in playbooks, group vars, hosts vars, role, ...
             dbuser: current
             dbpass: tesla
 
+
 to call the variable : "{{dbname}}"
 - we can create task to print the variable
 <sub>
@@ -227,6 +236,7 @@ to call the variable : "{{dbname}}"
         dbname: sky
         dbuser: pilot
         dbpass: aircraft
+
 - run the playbook : comment the vars section inside playbook (playbook vars have higher priority)
 
 ### host var
@@ -244,6 +254,8 @@ generated when setup module executed
 <sub>
 
         gather_fasts: FALSE
+
+
 - ansible -m setup web01 : to see fact variables for web01
   - print variable using playbook
   <sub>
@@ -252,6 +264,7 @@ generated when setup module executed
             - name: print os name
               debug:
                   var: ansible_distribution
+
 - run
 
 ## Decision-making
@@ -287,6 +300,8 @@ generated when setup module executed
                         enabled: yes
                         when: ansible_distribution =="Ubuntu"
 
+
+
 - run
 ## Loops
 - loops
@@ -313,6 +328,8 @@ generated when setup module executed
           copy:
               content: '# This is manged by ansible. no manual changes please'
               dest: /etc/motd
+
+
 - create folder
 - add in playbook : vars : mydir: /opt/dir22 
 <sub>
@@ -339,11 +356,15 @@ generated when setup module executed
               state: restarted
               enabled: yes
             when: ansible_distribution =="Centos"
+
+
 - cons : service restart even there is no change
 - same for ubuntu machine
 <sub>
   
         dest : /etc/ntp.conf
+
+
 - add tasks to restart ntp on ubuntu and chronyd on centos
 - with template variable will be replaced by their values, template module is intelligent, no variable replacement with copy module
 
@@ -497,4 +518,6 @@ reusable in different project or different env, and structured
           region: us-east-1
           tags:
             Environment: Testing
+
+
 - test it and terminate instance,  delete key
